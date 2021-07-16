@@ -1,0 +1,559 @@
+/****************************************/
+/*************修改展示部分****************/
+/****************************************/
+:root {
+  --side-bar-bg-color: #fff;
+  --control-text-color: #777;
+  --select-text-bg-color: #ffafa3;
+  --active-file-text-color: #262626;
+  --active-file-border-color: #f22f27;
+  /* --active-file-bg-color: #fff3f0; */
+  --primary-color: #f22f27;
+  /* 中性色 */
+  --mid-1: #ffffff;
+  --mid-2: #fafafa;
+  --mid-3: #f5f5f5;
+  --mid-4: #f0f0f0;
+  --mid-5: #d9d9d9;
+  --mid-6: #bfbfbf;
+  --mid-7: #8c8c8c;
+  --mid-8: #595959;
+  --mid-9: #434343;
+  --mid-10: #262626;
+  --mid-11: #1f1f1f;
+  --mid-12: #141414;
+  --mid-13: #000000;
+  /* 主题色 */
+  --main-1: #fff3f0;
+  --main-2: #ffd4cc;
+  --main-3: #ffafa3;
+  --main-4: #ff887a;
+  --main-5: #ff5d52;
+  --main-6: #f22f27;
+  --main-7: #cc1616;
+  --main-8: #a60a0f;
+  --main-9: #80010a;
+  --main-10: #590009;
+}
+
+/****************************************/
+/*************修改展示部分****************/
+/****************************************/
+:root {
+  --side-bar-bg-color: #fff;
+  --control-text-color: #777;
+  --select-text-bg-color: #ffafa3;
+  --active-file-text-color: #262626;
+  --active-file-border-color: #f22f27;
+  /* --active-file-bg-color: #fff3f0; */
+  --primary-color: #f22f27;
+  /* 中性色 */
+  --mid-1: #ffffff;
+  --mid-2: #fafafa;
+  --mid-3: #f5f5f5;
+  --mid-4: #f0f0f0;
+  --mid-5: #d9d9d9;
+  --mid-6: #bfbfbf;
+  --mid-7: #8c8c8c;
+  --mid-8: #595959;
+  --mid-9: #434343;
+  --mid-10: #262626;
+  --mid-11: #1f1f1f;
+  --mid-12: #141414;
+  --mid-13: #000000;
+  /* 主题色 */
+  --main-1: #fff3f0;
+  --main-2: #ffd4cc;
+  --main-3: #ffafa3;
+  --main-4: #ff887a;
+  --main-5: #ff5d52;
+  --main-6: #f22f27;
+  --main-7: #cc1616;
+  --main-8: #a60a0f;
+  --main-9: #80010a;
+  --main-10: #590009;
+}
+
+.v-note-show h1 {
+  text-align: center;
+  padding-bottom: 0.3em !important;
+  font-size: 2.2em !important;
+  line-height: 1.2 !important;
+  margin: 1.4em auto 1.2em !important;
+  color: var(--main-10);
+}
+
+.v-note-show h1,
+.v-note-show h2,
+.v-note-show h3,
+.v-note-show h4,
+.v-note-show h5,
+.v-note-show h6 {
+  position: relative;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  line-height: 1.4;
+  cursor: text;
+}
+
+.v-note-show h2 a,
+.v-note-show h3 a {
+  color: #34495e;
+}
+
+.v-note-show h1:hover a.anchor,
+.v-note-show h2:hover a.anchor,
+.v-note-show h3:hover a.anchor,
+.v-note-show h4:hover a.anchor,
+.v-note-show h5:hover a.anchor,
+.v-note-show h6:hover a.anchor {
+  text-decoration: none;
+}
+
+.v-note-show h2 {
+  margin: 1.2em auto 1em !important;
+  line-height: 1.4 !important;
+  font-size: 1.8em !important;
+  border-bottom: 1px solid var(--main-6) !important;
+}
+
+.v-note-show h2::before {
+  content: '# ' !important;
+  color: #f22f27;
+}
+
+.v-note-show h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+  margin: 1.6em auto 1.2em;
+  padding-left: 9px;
+  border-left: 5px solid #f22f27;
+}
+
+
+.v-note-show h4 {
+  margin-top: 0.1em;
+  font-size: 1.3em;
+  padding-left: 6px;
+  padding-right: 6px;
+  display: inline-block;
+  border: 1px solid var(--main-6);
+  border-top: 3px solid var(--main-6);
+}
+
+.v-note-show h5::before,
+.v-note-show h6::before {
+  position: absolute;
+  right: calc(100% + .75em);
+  top: 0;
+  color: #5b5b5b;
+  font-size: 0.8rem;
+  font-weight: bold;
+  font-variant: 'small-caps';
+  white-space: nowrap;
+  /* 文本强制不换行 */
+  border: 0;
+}
+
+.v-note-show h5 {
+  font-size: 1.2rem !important;
+}
+
+.v-note-show h6 {
+  font-size: 1.1rem !important;
+}
+
+.v-note-show h5::before {
+  content: 'H5';
+  top: 0.18rem;
+}
+
+.v-note-show h6::before {
+  content: 'H6';
+  top: 0.18rem;
+}
+
+.v-note-show p,
+.v-note-show blockquote,
+.v-note-show ul,
+.v-note-show ol,
+.v-note-show dl,
+.v-note-show table {
+  margin: 0.2em 0.1em !important;
+  /*padding-top: 0.6em !important;*/
+  /*padding-bottom: 0.6em !important;*/
+}
+
+
+.v-note-show ol,
+.v-note-show ul {
+  padding-left: 25px;
+  margin: .5rem 0;
+}
+
+.v-note-show ol > li,
+.v-note-show ul > li {
+  margin: 5px 0 !important;
+}
+
+.v-note-show ol > li > *,
+.v-note-show ul > li > * {
+  color: #333;
+  font-weight: normal;
+}
+
+.v-note-show ol > li > *:not(ol):not(ul),
+.v-note-show ul > li > *:not(ol):not(ul) {
+  padding-left: .25rem;
+}
+
+.v-note-show ul {
+  list-style-type: disc;
+}
+
+.v-note-show hr {
+  height: 2px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+  overflow: hidden;
+  box-sizing: content-box;
+}
+
+.v-note-show blockquote {
+  border-left: 4px solid rgb(239, 112, 96) !important;
+  padding: 8px 12px !important;
+  color: #3f3f3f !important;
+  background-color: #fff9f9 !important;
+}
+
+.v-note-show h1 p,
+.v-note-show h2 p,
+.v-note-show h3 p,
+.v-note-show h4 p,
+.v-note-show h5 p,
+.v-note-show h6 p {
+  margin-top: 0;
+}
+
+.v-note-show blockquote p {
+  margin: 3px 0 !important;
+}
+
+.v-note-show p {
+  line-height: 1.8rem !important;
+  word-spacing: .05rem !important;
+  color: var(--mid-13);
+  margin: 13.6px 0 !important;
+}
+
+.v-note-show strong {
+  /*padding: 0.1em;*/
+  font-size: 16px;
+  color: #dc3545;
+}
+
+.v-note-show em {
+  padding: 0 2px 0 2px;
+  font-style: normal;
+  color: #ff3502;
+}
+
+.v-note-show table {
+  padding: 0;
+  word-break: initial;
+}
+
+.v-note-show table tr {
+  border-top: 1px solid var(--main-6);
+  margin: 0;
+  padding: 0;
+}
+
+.v-note-show table tr:nth-child(2n),
+thead {
+  background-color: #fafafa;
+}
+
+.v-note-show table tr th {
+  font-weight: bold;
+  border: 1px solid var(--main-6);
+  border-bottom: 0;
+  text-align: left;
+  margin: 0;
+  padding: 6px 13px;
+}
+
+.v-note-show table tr td {
+  border: 1px solid var(--main-6);
+  text-align: left;
+  margin: 0;
+  padding: 6px 13px;
+}
+
+.v-note-show table tr th:first-child,
+.v-note-show table tr td:first-child {
+  margin-top: 0;
+}
+
+.v-note-show table tr th:last-child,
+.v-note-show table tr td:last-child {
+  margin-bottom: 0;
+}
+
+.v-note-show pre {
+  border: 1px solid #7a7a7a;
+  -webkit-font-smoothing: initial;
+  margin: 2rem 0 !important;
+  /* padding: 0.3rem 0 !important; */
+  padding: 3px 5px;
+  line-height: 1.55rem;
+  border-radius: 2px;
+  font-family: 'Roboto Mono', 'Source Sans Pro', 'Microsoft YaHei', '微软雅黑' !important;
+  font-size: 0.9rem;
+  word-wrap: normal;
+}
+
+.v-note-read-content h1 {
+  text-align: center;
+  padding-bottom: 0.3em !important;
+  font-size: 2.2em !important;
+  line-height: 1.2 !important;
+  margin: 1.4em auto 1.2em !important;
+  color: var(--main-10);
+}
+
+.v-note-read-content h1,
+.v-note-read-content h2,
+.v-note-read-content h3,
+.v-note-read-content h4,
+.v-note-read-content h5,
+.v-note-read-content h6 {
+  position: relative;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  line-height: 1.4;
+  cursor: text;
+}
+
+.v-note-read-content h2 a,
+.v-note-read-content h3 a {
+  color: #34495e;
+}
+
+.v-note-read-content h1:hover a.anchor,
+.v-note-read-content h2:hover a.anchor,
+.v-note-read-content h3:hover a.anchor,
+.v-note-read-content h4:hover a.anchor,
+.v-note-read-content h5:hover a.anchor,
+.v-note-read-content h6:hover a.anchor {
+  text-decoration: none;
+}
+
+.v-note-read-content h2 {
+  margin: 1.2em auto 1em !important;
+  line-height: 1.4 !important;
+  font-size: 1.8em !important;
+  border-bottom: 1px solid var(--main-6) !important;
+}
+
+.v-note-read-content h2::before {
+  content: '# ' !important;
+  color: #f22f27;
+}
+
+.v-note-read-content h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+  margin: 1.6em auto 1.2em;
+  padding-left: 9px;
+  border-left: 5px solid #f22f27;
+}
+
+
+.v-note-read-content h4 {
+  margin-top: 0.1em;
+  font-size: 1.3em;
+  padding-left: 6px;
+  padding-right: 6px;
+  display: inline-block;
+  border: 1px solid var(--main-6);
+  border-top: 3px solid var(--main-6);
+}
+
+.v-note-read-content h5::before,
+.v-note-read-content h6::before {
+  position: absolute;
+  right: calc(100% + .75em);
+  top: 0;
+  color: #5b5b5b;
+  font-size: 0.8rem;
+  font-weight: bold;
+  font-variant: 'small-caps';
+  white-space: nowrap;
+  /* 文本强制不换行 */
+  border: 0;
+}
+
+.v-note-read-content h5 {
+  font-size: 1.2rem !important;
+}
+
+.v-note-read-content h6 {
+  font-size: 1.1rem !important;
+}
+
+.v-note-read-content h5::before {
+  content: 'H5';
+  top: 0.18rem;
+}
+
+.v-note-read-content h6::before {
+  content: 'H6';
+  top: 0.18rem;
+}
+
+.v-note-read-content p,
+.v-note-read-content blockquote,
+.v-note-read-content ul,
+.v-note-read-content ol,
+.v-note-read-content dl,
+.v-note-read-content table {
+  margin: 0.2em 0.1em !important;
+  /*padding-top: 0.6em !important;*/
+  /*padding-bottom: 0.6em !important;*/
+}
+
+
+.v-note-read-content ol,
+.v-note-read-content ul {
+  padding-left: 25px;
+  margin: .5rem 0;
+}
+
+.v-note-read-content ol > li,
+.v-note-read-content ul > li {
+  margin: 5px 0 !important;
+}
+
+.v-note-read-content ol > li > *,
+.v-note-read-content ul > li > * {
+  color: #333;
+  font-weight: normal;
+}
+
+.v-note-read-content ol > li > *:not(ol):not(ul),
+.v-note-read-content ul > li > *:not(ol):not(ul) {
+  padding-left: .25rem;
+}
+
+.v-note-read-content ul {
+  list-style-type: disc;
+}
+
+.v-note-read-content hr {
+  height: 2px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+  overflow: hidden;
+  box-sizing: content-box;
+}
+
+.v-note-read-content blockquote {
+  border-left: 4px solid rgb(239, 112, 96) !important;
+  padding: 8px 12px !important;
+  color: #3f3f3f !important;
+  background-color: #fff9f9 !important;
+}
+
+.v-note-read-content h1 p,
+.v-note-read-content h2 p,
+.v-note-read-content h3 p,
+.v-note-read-content h4 p,
+.v-note-read-content h5 p,
+.v-note-read-content h6 p {
+  margin-top: 0;
+}
+
+.v-note-read-content blockquote p {
+  margin: 3px 0 !important;
+}
+
+.v-note-read-content p {
+  line-height: 1.8rem !important;
+  word-spacing: .05rem !important;
+  color: var(--mid-13);
+  margin: 13.6px 0 !important;
+}
+
+.v-note-read-content strong {
+  /*padding: 0.1em;*/
+  font-size: 16px;
+  color: #dc3545;
+}
+
+.v-note-read-content em {
+  padding: 0 2px 0 2px;
+  font-style: normal;
+  color: #ff3502;
+}
+
+.v-note-read-content table {
+  padding: 0;
+  word-break: initial;
+}
+
+.v-note-read-content table tr {
+  border-top: 1px solid var(--main-6);
+  margin: 0;
+  padding: 0;
+}
+
+.v-note-read-content table tr:nth-child(2n),
+thead {
+  background-color: #fafafa;
+}
+
+.v-note-read-content table tr th {
+  font-weight: bold;
+  border: 1px solid var(--main-6);
+  border-bottom: 0;
+  text-align: left;
+  margin: 0;
+  padding: 6px 13px;
+}
+
+.v-note-read-content table tr td {
+  border: 1px solid var(--main-6);
+  text-align: left;
+  margin: 0;
+  padding: 6px 13px;
+}
+
+.v-note-read-content table tr th:first-child,
+.v-note-read-content table tr td:first-child {
+  margin-top: 0;
+}
+
+.v-note-read-content table tr th:last-child,
+.v-note-read-content table tr td:last-child {
+  margin-bottom: 0;
+}
+
+.v-note-read-content pre {
+  border: 1px solid #7a7a7a;
+  -webkit-font-smoothing: initial;
+  margin: 2rem 0 !important;
+  /* padding: 0.3rem 0 !important; */
+  padding: 3px 5px;
+  line-height: 1.55rem;
+  border-radius: 2px;
+  font-family: 'Roboto Mono', 'Source Sans Pro', 'Microsoft YaHei', '微软雅黑' !important;
+  font-size: 0.9rem;
+  word-wrap: normal;
+}
