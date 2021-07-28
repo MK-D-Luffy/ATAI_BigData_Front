@@ -8,9 +8,6 @@
         <!--        </h2>-->
         <section class="c-tab-title">
           <a id="subjectAll" title="全部" href="#" style="font-size: 20px;margin-bottom: 10px;margin-top:-10px">全部成员</a>
-          <!-- <c:forEach var="subject" items="${subjectList }">
-                            <a id="${subject.subjectId}" title="${subject.subjectName }" href="javascript:void(0)" onclick="submitForm(${subject.subjectId})">${subject.subjectName }</a>
-          </c:forEach>-->
         </section>
       </header>
       <section class="c-sort-box unBr">
@@ -35,10 +32,10 @@
                        class="fsize18 c-666">{{ teacher.name }}</a>
                   </div>
                   <div class="hLh30 txtOf tac">
-                    <span class="fsize14 c-999">{{ teacher.intro }}</span>
+                    <p class="c-999 f-fA">{{ teacher.career }}</p>
                   </div>
                   <div class="mt15 i-q-txt">
-                    <p class="c-999 f-fA">{{ teacher.career }}</p>
+                    <p class="fsize14 c-999">{{ teacher.intro }}</p>
                   </div>
                 </section>
               </li>
@@ -112,7 +109,7 @@ export default {
     },
 
     view(id) {
-      this.$router.push({path: `/teacher/${id}`})
+      this.$router.push({path: `/member/${id}`})
     }
   }
 };

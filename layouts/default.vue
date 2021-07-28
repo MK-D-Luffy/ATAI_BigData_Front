@@ -16,7 +16,7 @@
             <router-link to="/competition" tag="li" active-class="current">
               <a>大数据竞赛</a>
             </router-link>
-            <router-link to="/teacher" tag="li" active-class="current">
+            <router-link to="/member" tag="li" active-class="current">
               <a>实验室成员</a>
             </router-link>
             <router-link to="/blog" tag="li" active-class="current">
@@ -80,7 +80,7 @@
     </header>
     <!-- /公共头引入 -->
 
-    <nuxt v-if="isRouterAlive" style="min-height:800px"/>
+    <nuxt v-if="isRouterAlive" style="min-height:640px"/>
 
     <!-- 公共底引入 -->
     <!--下面白色-->

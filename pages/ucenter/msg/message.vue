@@ -1,6 +1,6 @@
 <template>
-  <article class="col-7 fl">
-    <div class="u-r-cont" style="border-left:1px dotted #ddd;padding-left:40px;min-height:540px">
+  <article class="col-7 fl userInfo">
+    <div class="u-r-cont">
       <section>
         <div>
           <section class="c-infor-tabTitle c-tab-title">
@@ -50,7 +50,7 @@
             <el-table-column
               label="日期"
               width="40">
-                <i class="el-icon-message-solid"></i>
+              <i class="el-icon-message-solid"></i>
             </el-table-column>
             <el-table-column
               prop="address"

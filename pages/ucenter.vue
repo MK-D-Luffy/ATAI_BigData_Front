@@ -4,7 +4,7 @@
     <section class="container">
       <div class="u-body pt25 pb40">
 
-        <aside class="fl uMenu mr20" style="background-color:#fff;width:22%;">
+        <aside class="fl uMenu mr20" style="background-color:#fff;width:22%;min-height:360px">
           <header class="comm-titl" style="padding-left:19px;padding-top:12px;padding-bottom: 17px">
             <span class="tac f16"><span class="c-333">个人中心</span></span>
             <div style="display:flex; align-items: center;">
@@ -33,7 +33,7 @@
             <el-menu-item index="2">
               <router-link to="/ucenter/info/password" tag="li" active-class="current" exact>
                 <i class="el-icon-key"></i>
-                <span>密码设置</span>
+                <span>修改密码</span>
               </router-link>
             </el-menu-item>
             <el-menu-item index="3">
@@ -57,7 +57,7 @@
           </el-menu>
         </aside>
 
-        <nuxt-child style="background-color:#fff"/>
+        <nuxt-child/>
 
         <div class="clear"/>
       </div>
@@ -87,7 +87,6 @@ export default {
   },
   created() {
     let userStr = cookie.get("ATAI_BigData_ucenter")
-    console.log(userStr)
     //userStr是字符串   需要转换为json对象
     if (userStr) {
       this.loginInfo = JSON.parse(userStr)

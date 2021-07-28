@@ -5,6 +5,7 @@
 .clearfix:after{clear:both}
 .clear{clear:both;display:block;overflow:hidden;visibility:hidden;width:0;height:0}
 .fl{float:left}.fr{float:right}
+.userInfo{background-color:#fff;margin-bottom:40px}
 .pr{position:relative}.pa{position:absolute}
 .f-fH{font-family:SimHei}.f-fM{font-family:'Microsoft YaHei'}.f-fA{font-family:SimSun}.f-fG{font-family:Georgia}
 .unBg{background:0 0!important}.unBr{border:none!important}.unFw{font-weight:400}
@@ -251,7 +252,7 @@ a.current-2 .lh-p-icon{background-position:0 -254px}
 .u-m-dd ul li ol{padding:10px 0 0 50px}
 .u-m-dd ul li ol li a{font-size:14px;color:#777}
 .u-m-dd ul li a:hover{text-decoration:none}
-.u-r-cont{border-left:1px dotted #ddd;padding-left:40px;min-height:720px}
+.u-r-cont{border-left:1px dotted #ddd;padding-left:40px;min-height:600px;}
 .lrWrap{width:320px}
 .d-s-head-tab{display:block;height:40px}
 .d-s-head-tab a{border-bottom:1px solid transparent;color:#666;display:block;float:left;width:100px;text-align:center;line-height:40px;font-size:18px}

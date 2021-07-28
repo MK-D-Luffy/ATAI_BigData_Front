@@ -3,32 +3,39 @@
     <!-- 讲师列表 开始 -->
     <section class="container" style="width: 88%;margin-top:15px;">
 
-      <el-form>
+      <el-form v-if="!endMark">
         <!-- 提交到oss，后端 -->
         <el-form-item>
           <!-- myUpload唯一标识  -->
           <el-upload
+            :class="{ notAllowed: submitCounts===0}"
             ref="myUpload"
             :auto-upload="false"
             :on-success="fileUploadSuccess"
             :on-error="fileUploadError"
-            :disabled="importBtnDisabled"
+            :disabled="importBtnDisabled||submitCounts===0"
             :limit="1"
-            :action="BASE_API+'/atitcompetition/atai-user-competition/saveResult/'+compentitionId+'/'+userId"
+            :action="BASE_API+'/atitcompetition/atai-user-competition/saveResult/'+competitionId+'/'+userId"
             name="file"
             accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain"
           >
             <!-- 设置上传格式 微软excel -->
-            <el-button style="background-color:#00C1DE;color:#fff" slot="trigger" size="small">选取文件</el-button>
+            <el-button :disabled="submitCounts===0" :class="{ notAllowed: submitCounts===0 }"
+                       style="background-color:#00C1DE;color:#fff;"
+                       slot="trigger" size="small">选取文件
+            </el-button>
             <el-button
+              :disabled="submitCounts===0"
+              :class="{ notAllowed: submitCounts===0 }"
               :loading="loading"
               style="margin-left: 10px;"
               size="small"
               type="success"
+
               @click="submitUpload"
             >{{ fileUploadBtnText }}
             </el-button>
-            <span style="color:#3C763D;margin-left: 6px">可提交次数为2次</span>
+            <span style="color:#3C763D;margin-left: 6px">可提交次数为{{ submitCounts }}次</span>
           </el-upload>
         </el-form-item>
       </el-form>
@@ -36,20 +43,10 @@
       <el-divider>
         <i class="el-icon-monitor"></i>
       </el-divider>
-      <el-table :data="base" style="width: 100%">
+      <el-table border :data="base" style="width: 100%">
         <el-table-column prop="clo1" label="ATAI_BigData" width="220"></el-table-column>
         <el-table-column prop="clo2" label="比赛信息"></el-table-column>
       </el-table>
-
-      <!--      <el-divider>-->
-      <!--        <i class="el-icon-monitor"></i>-->
-      <!--      </el-divider>-->
-      <!--      <el-table :data="duiyou" style="width: 100%">-->
-      <!--        <el-table-column prop="nickname" label="团队成员昵称" width="180"></el-table-column>-->
-      <!--        <el-table-column prop="email" label="邮箱" width="180"></el-table-column>-->
-      <!--        <el-table-column prop="sign" label="实验室认证"></el-table-column>-->
-      <!--      </el-table>-->
-
 
     </section>
   </div>
@@ -58,12 +55,29 @@
 <script>
 //引入调用competition.js文件
 import competitionApi from "@/api/competition";
+//引入调用js-cookie
+import cookie from 'js-cookie'
 
 export default {
   name: "submitRes",
+  inject: ['reload'],
   props: {
-    teamId: String,
-    required: true
+    endMark: Boolean,
+    userCompetition: Object,
+    teamCompetition: Object,
+  },
+  //因为父组件props传给子组件的值是通过后端接口返回的数据，
+  //也就是说是异步返回的数据，所以导致取值不同步，当然获取不到。
+  //所以可以通过在watch中监听props的变化，如果有返回值就直接赋值
+  watch: {
+    teamCompetition: {
+      handler(newVal, oldVal) {
+        this.getTeamCompetition();
+      },
+      immediate: true,
+      //如果是对象要深度监听
+      deep: true
+    },
   },
   data() {
     return {
@@ -71,74 +85,74 @@ export default {
       OSS_PATH: process.env.OSS_PATH, // 阿里云OSS地址
       fileUploadBtnText: "上传到服务器", // 按钮文字
       importBtnDisabled: false, // 按钮是否禁用,
-      compentitionId: "",
+      competitionId: "",
       loading: false,
-      // teamId: "",
       userId: "",
       teamName: "",
       competition: "",
-      score: "",
-      rank: "",
-      duiyou: [],
-      teamCompetition: "",
+      score: 0,
+      submitCounts: 0,
+      rank: 1,
+      nickname: "",
       base: [
         {
           clo1: "我的团队",
           clo2: this.teamName
         },
         {
-          clo1: "最优成绩提交时间",
-          clo2: this.deadline
+          clo1: "我的名称",
+          clo2: this.nickname
         },
         {
-          clo1: "score",
-          clo2: this.score
+          clo1: "最优成绩提交时间",
+          clo2: this.deadline
         },
         {
           clo1: "排名",
           clo2: this.rank
         },
+        {
+          clo1: "score",
+          clo2: this.score
+        },
       ]
     };
   },
   created() {
-    this.compentitionId = this.$route.params.id;
-    this.getTeamCompetition();
-  },
-  mounted() {
+    this.competitionId = this.$route.params.id;
+    this.submitCounts = this.userCompetition.submitCounts;
+    let userStr = cookie.get("ATAI_BigData_ucenter")
+    if (userStr) {
+      this.nickname = JSON.parse(userStr).nickname
+      this.base[1].clo2 = this.nickname;
+      this.getRank(this.competitionId, this.nickname);
+    }
+
   },
   methods: {
     getTeamCompetition() {
-      // debugger
-      competitionApi
-        .getTeamCompetition(this.compentitionId, this.teamId)
-        .then(response => {
-          //请求成功
-          // debugger
-          // console.log(response.data.data);
-          this.teamCompetition = response.data.data.teamCompetition;
-          this.teamName = this.teamCompetition.teamName;
-          this.score = this.teamCompetition.score;
-          this.userId = this.teamCompetition.userId;
-          this.duiyou = this.teamCompetition.friend;
-          this.base[0].clo2 = this.teamName;
-          let time = this.teamCompetition.deadline;
-          this.base[1].clo2 = time.substring(0, 10) + " " + time.substring(11, 19);
-          this.base[2].clo2 = this.score;
-          this.getRank(this.compentitionId, this.teamName);
-        });
+      this.teamName = this.teamCompetition.teamName;
+      this.score = this.teamCompetition.score;
+      this.userId = this.teamCompetition.userId;
+      this.base[0].clo2 = this.teamName;
+      let time = this.teamCompetition.deadline;
+      if (time !== undefined && time !== null) {
+        this.base[2].clo2 = time.substring(0, 10) + " " + time.substring(11, 19);
+      }
+      this.base[4].clo2 = this.score;
     },
 
-    getRank(competitionId, teamName) {
-      competitionApi.getRank(competitionId, teamName)
+    getRank(competitionId, nickname) {
+      competitionApi.getRank(competitionId, nickname)
         .then(response => {//请求成功
-          console.log(response.data.data);
+          // console.log(response.data.data);
           this.rank = response.data.data.rank;
           if (this.rank != null) {
             this.base[3].clo2 = this.rank;
           }
         })
     },
+
     //点击上传按钮  上传excel文件到接口种
     submitUpload() {
       if (this.$refs.myUpload.$data.uploadFiles.length > 0) {
@@ -158,7 +172,7 @@ export default {
     fileUploadSuccess(response) {
       //提示信息
       // debugger
-      console.log(response);
+      // console.log(response);
       if (response.success === true) {
         this.fileUploadBtnText = "导入成功";
         this.importBtnDisabled = false;
@@ -169,6 +183,7 @@ export default {
         });
         //刷得分日期
         this.getTeamCompetition();
+        this.getUserCompetition(this.competitionId);
       } else {
         this.fileUploadBtnText = "重新上传";
         this.loading = false;
@@ -197,5 +212,9 @@ export default {
 .el-table td,
 .el-table th {
   text-align: center !important;
+}
+
+.notAllowed {
+  cursor: not-allowed
 }
 </style>

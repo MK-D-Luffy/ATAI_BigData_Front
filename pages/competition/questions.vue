@@ -5,18 +5,15 @@
     <section class="container" style="width:98%;margin-top:25px;">
 
       <el-form>
-
-        <el-form-item v-if="baominflag">
-          <!--                  <el-tag type="info">报名后可以下载赛题</el-tag>-->
-          <span style="font-size:24px;margin-right:30px;margin-bottom: 30px">赛题数据</span>
-          <el-tag style="zoom:110%">
+        <el-form-item style="margin-bottom:0" v-if="baominflag">
+          <span style="font-size:24px;margin-right:20px;">赛题数据</span>
+          <el-tag style="zoom:100%">
             <i class="el-icon-download"/>
             <a :href="competition.cover">点击下载赛题</a>
           </el-tag>
         </el-form-item>
 
-        <div v-html="competition.description"></div>
-
+        <div id="description" v-html="competition.description"></div>
       </el-form>
 
     </section>
@@ -32,69 +29,72 @@ export default {
   name: "questions",
   props: {
     baominflag: Boolean,
-    required: true
+    competition: Object
   },
   data() {
     return {
       baomin: "报名比赛",
-      xiazai: "JavaScript：;",
       teamId: "",
       classList: [],
-      competition: {
-        description: ""
-      },
-      // tableData2:[{
-      //   text:"比赛数据",
-      //   dowload:""
-      // }]
     };
-  },
-  created() {
-    const token = cookie.get("ATAI_BigData_token");
-    //根据id获取比赛
-    this.getCompetitionDetailInfo(this.$route.params.id);
-  },
-
-  methods: {
-    //根据id获取比赛
-    getCompetitionDetailInfo(id) {
-      //比赛列表的方法
-      competitionApi
-        .getCompetitionDetailInfo(id)
-        .then(response => {
-          //请求成功
-          //response接口返回的数据
-          debugger;
-          this.competition = response.data.data.competition;
-
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
   },
 };
 </script>
 <style>
-h1, h2, h3, h4, h5, h6 {
-  margin-top: 20px;
-  margin-bottom: 15px;
+#description h1, #description h2, #description h3, #description h4, #description h5, #description h6 {
+  padding-top: 20px;
+  padding-bottom: 8px;
 }
 
-h1::after, h2::after, h3::after, h4::after, h5::after, h6::after {
-  content: '';
-  display: block;
+#description hr {
   position: relative;
-  top: 0.33em;
+  top: 0.20em;
+  border: none;
   border-bottom: 1px solid rgba(128, 128, 128, 0.33);
-  margin-top: 3px;
-  /*margin-bottom: 15px;*/
+  background-color: rgba(128, 128, 128, 0.33);
 }
 
-p {
-  margin: 16.8px 0;
+#description p {
+  padding: 12.8px 0;
   line-height: 26px;
   font-size: 14px;
-  /*text-align: center;*/
 }
+
+#description ul li {
+  list-style: disc;
+  margin-left: 15px
+}
+
+#description ol li {
+  list-style: decimal;
+  margin-left: 15px
+}
+
+#description table {
+  font-family: verdana, arial, sans-serif;
+  font-size: 11px;
+  color: #333333;
+  border-width: 1px;
+  border-color: #666666;
+  border-collapse: collapse;
+}
+
+#description table th {
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #666666;
+  background-color: #dedede;
+  text-align: center;
+}
+
+#description table td {
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #666666;
+  background-color: #ffffff;
+  text-align: center;
+}
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <article class="col-7 fl">
+  <article class="col-7 fl userInfo">
     <div class="u-r-cont">
       <section>
         <div>
@@ -24,13 +24,13 @@
             fit
             highlight-current-row>
             <el-table-column  label="文章类型"  width="150" align="center" >
-                       <el-col   slot-scope="scope"  >             
-                            <el-button type="success"  size="mini">{{ scope.row.category }}</el-button>                                              
+                       <el-col   slot-scope="scope"  >
+                            <el-button type="success"  size="mini">{{ scope.row.category }}</el-button>
                       </el-col>
             </el-table-column>
             <el-table-column label="文章信息" align="center" >
               <template slot-scope="scope">
-                <div class="info" >                 
+                <div class="info" >
                   <div class="title">
                     <a @click="view(scope.row.id)" >{{ scope.row.title }}</a>
                   </div>
@@ -51,7 +51,7 @@
               <template slot-scope="scope">
                 {{ scope.row.gmtCreate }}
               </template>
-            </el-table-column>                  
+            </el-table-column>
           </el-table>
         </div>
 
@@ -80,7 +80,7 @@
 </template>
 
 <script>
- 
+
   import blogApi from '@/api/blog'
 
   export default {
@@ -112,7 +112,7 @@
         this.page=page
          blogApi.getMyArticleList(this.page, this.limit).then(response => {
           debugger
-          
+
           this.articlesList = response.data.data.records
           this.data = response.data.data
         })

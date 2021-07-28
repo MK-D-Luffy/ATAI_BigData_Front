@@ -1,5 +1,5 @@
 <template>
-  <article class="col-7 fl">
+  <article class="col-7 fl userInfo">
     <div class="u-r-cont">
       <section>
         <div>
@@ -79,7 +79,6 @@ export default {
     fetchcompetitionList() {
       competitionApi.getMyCompetitionList().then(response => {
         debugger
-
         this.competitionList = response.data.data.data
       })
     },

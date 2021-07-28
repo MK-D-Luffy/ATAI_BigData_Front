@@ -34,11 +34,19 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-    }
+    },
+    // 开启打包分析
+    // analyze: true,
+    // assetFilter: function (assetFilename) {
+    //   return assetFilename.endsWith('.js');
+    // }
   },
   plugins: [
     {src: '~/plugins/nuxt-swiper-plugin.js', ssr: false},
-    '~/plugins/global.js'
+    '~/plugins/global.js',
+    {src: "~/plugins/onssr.js", ssr: false},
+    {src: "~/plugins/tinymce.js", ssr: false},
+    '~/plugins/route.js'
   ],
 
   css: [

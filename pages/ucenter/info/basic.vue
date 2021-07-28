@@ -1,5 +1,5 @@
 <template>
-  <article class="col-7 fl">
+  <article class="col-7 fl" style="background-color:#fff">
     <div class="u-r-cont">
       <section>
         <div>
@@ -12,8 +12,8 @@
         </div>
 
         <!-- 表格 -->
-        <el-form label-width="80px" size="medium">
-          <el-form-item label="昵称">
+        <el-form show-message label-width="80px" size="medium" :model="memberInfo" ref="memberInfo">
+          <el-form-item label="昵称" prop="nickname" :rules="[{validator:checkNickname,trigger:'blur'}]">
             <el-input v-model="memberInfo.nickname" style="width:240px"/>
           </el-form-item>
           <el-form-item label="性别">
@@ -28,11 +28,11 @@
           </el-form-item>
           <el-form-item label="手机号">
             <!--            <el-input v-model="memberInfo.mobile"/>-->
-            <span>{{ memberInfo.mobile }}</span>
+            <span>{{ memberInfo.mobile.substring(0, 3) + "xxxx" + memberInfo.mobile.substring(7, 11) }}</span>
           </el-form-item>
           <el-form-item label="邮箱">
             <!--            <el-input v-model="memberInfo.email"/>-->
-            <span>{{ memberInfo.email }}</span>
+            <span>{{ memberInfo.email.substring(0, 3) + "xxxx" + memberInfo.email.substring(7) }}</span>
           </el-form-item>
           <el-form-item label="年龄">
             <el-input-number style="width:180px" v-model="memberInfo.age" :min="0" controls-position="right"/>
@@ -60,7 +60,7 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item style="margin-top: 30px">
+          <el-form-item style="margin-top: 40px;margin-bottom: 40px">
             <el-button :disabled="saveBtnDisabled" plain="true" type="primary" @click="save">保存</el-button>
           </el-form-item>
         </el-form>
@@ -195,6 +195,22 @@ export default {
       })
     },
 
+    checkNickname(rule, value, callback) {
+      if (value === '') {
+        callback(new Error('用户名不能为空'));
+      } else if (value.length > 16) {
+        callback(new Error('用户名长度不应超过16个字符'));
+      } else {
+        loginApi.checkNickname(this.memberInfo.nickname).then(response => {
+          let flag = response.data.data.flag
+          if(flag){
+            callback(new Error('用户名重复'))
+          }else{
+            callback()
+          }
+        })
+      }
+    }
   }
 }
 </script>

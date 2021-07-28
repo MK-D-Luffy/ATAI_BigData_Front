@@ -1,5 +1,5 @@
 <template>
-  <div class="me-view-body">
+  <div class="me-view-body" style="background-color: #fff">
     <section class="container">
       <el-container class="me-view-container">
         <el-main>
@@ -177,21 +177,53 @@ export default {
       this.$router.push({path: `/write/${this.article.id}`});
     },
     removeArticle() {
-      let that = this;
-      blogApi
-        .removeMyArticle(that.$route.params.id)
-        .then(response => {
-          this.$router.push({path: `/blog/`});
-        })
-        .catch(error => {
-          if (error !== "error") {
+      this.$confirm('确定要删除该文章吗?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let that = this;
+        blogApi
+          .removeMyArticle(that.$route.params.id)
+          .then(response => {
+            this.$router.push({path: `/blog/`});
             that.$message({
-              type: "error",
-              message: "文章删除失败",
+              type: "success",
+              message: "文章删除成功",
               showClose: true
             });
-          }
+          })
+          .catch(error => {
+            if (error !== "error") {
+              that.$message({
+                type: "error",
+                message: "文章删除失败",
+                showClose: true
+              });
+            }
+          });
+      }).catch(() => {
+        this.$message({
+          type: "info",
+          message: "取消操作",
+          showClose: true
         });
+      });
+      // let that = this;
+      // blogApi
+      //   .removeMyArticle(that.$route.params.id)
+      //   .then(response => {
+      //     this.$router.push({path: `/blog/`});
+      //   })
+      //   .catch(error => {
+      //     if (error !== "error") {
+      //       that.$message({
+      //         type: "error",
+      //         message: "文章删除失败",
+      //         showClose: true
+      //       });
+      //     }
+      //   });
     },
 
     getArticle() {

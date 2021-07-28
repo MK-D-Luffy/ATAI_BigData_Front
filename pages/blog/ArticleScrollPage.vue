@@ -64,7 +64,11 @@ export default {
       limit: 4, //每页记录数
       subjectNestedList: [], // 分类列表
       oneIndex: -1,
-      compObj: {}, // 查询表单对象
+      compObj: {
+        begin:'',
+        end:'',
+        title:'',
+      }, // 查询表单对象
       loading: false,
       noData: false,
       // innerPage: {

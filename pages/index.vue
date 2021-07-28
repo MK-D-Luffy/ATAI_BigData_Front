@@ -1,22 +1,22 @@
 <template>
 
   <div>
-<!--         <Message></Message>-->
-<!--&lt;!&ndash;     幻灯片 开始 &ndash;&gt;-->
-<!--         <div v-swiper:mySwiper="swiperOption" style="width:80%;height:80%" >-->
-<!--          <div class="swiper-wrapper">-->
+    <!--         <Message></Message>-->
+    <!--&lt;!&ndash;     幻灯片 开始 &ndash;&gt;-->
+<!--    <div v-swiper:mySwiper="swiperOption" style="width:80%;height:80%">-->
+<!--      <div class="swiper-wrapper">-->
 
-<!--            <div v-for="banner in bannerList" :key="banner.id" class="swiper-slide"  >-->
-<!--              <a target="_blank" :href="banner.linkUrl">-->
-<!--                <img :src="banner.imageUrl" :alt="banner.title">-->
-<!--              </a>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="swiper-pagination swiper-pagination-white"></div>-->
-<!--          <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>-->
-<!--          <div class="swiper-button-next swiper-button-white" slot="button-next"></div>-->
+<!--        <div v-for="banner in bannerList" :key="banner.id" class="swiper-slide">-->
+<!--          <a target="_blank" :href="banner.linkUrl">-->
+<!--            <img :src="banner.imageUrl" :alt="banner.title">-->
+<!--          </a>-->
 <!--        </div>-->
-<!--&lt;!&ndash;     幻灯片 结束 &ndash;&gt;-->
+<!--      </div>-->
+<!--      <div class="swiper-pagination swiper-pagination-white"></div>-->
+<!--      <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>-->
+<!--      <div class="swiper-button-next swiper-button-white" slot="button-next"></div>-->
+<!--    </div>-->
+    <!--&lt;!&ndash;     幻灯片 结束 &ndash;&gt;-->
 
     <div>
       <el-table
@@ -152,9 +152,9 @@ export default {
 
     view(id) {
       if (id != null)
-        this.$router.push({path: `/teacher/${id}`})
+        this.$router.push({path: `/member/${id}`})
       else
-        this.$router.push({path: `/teacher`})
+        this.$router.push({path: `/member`})
     }
 
 
