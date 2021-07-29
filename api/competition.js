@@ -119,16 +119,16 @@ export default {
     })
   },
 
-  addMember(competitionId, userId, newTeamName) {
+  acceptMember(competitionId, senderId,userId, newTeamName) {
     return request({
-      url: `/atitcompetition/atai-user-competition/addMember/${competitionId}/${userId}/${newTeamName}`,
+      url: `/atitcompetition/atai-user-competition/acceptMember/${competitionId}/${senderId}/${userId}/${newTeamName}`,
       method: 'get',
     })
   },
 
-  refuseMember(competitionId,userId){
+  refuseMember(competitionId,senderId){
     return request({
-      url: `/atitcompetition/atai-user-competition/refuseMember/${competitionId}/${userId}`,
+      url: `/atitcompetition/atai-user-competition/refuseMember/${competitionId}/${senderId}`,
       method: 'get',
     })
   },
@@ -136,6 +136,13 @@ export default {
   quitTeam(competitionId,userId){
     return request({
       url: `/atitcompetition/atai-user-competition/quitTeam/${competitionId}/${userId}`,
+      method: 'get',
+    })
+  },
+
+  getReceivers(competitionId,senderId){
+    return request({
+      url: `/atitcompetition/atai-user-competition/getReceivers/${competitionId}/${senderId}`,
       method: 'get',
     })
   },

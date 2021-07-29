@@ -243,7 +243,7 @@ export default {
             this.userCompetition = response.data.data.userCompetition;
             this.teamId = this.userCompetition.teamId;
 
-            console.log(this.userCompetition)
+            // console.log(this.userCompetition)
 
             //获取所在团队的信息
             this.getTeamCompetition();

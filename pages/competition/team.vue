@@ -78,6 +78,20 @@
             </el-table-column>
           </el-table-column>
         </el-table>
+
+        <el-table v-if="receivers.length!==0" :data="receivers">
+          <el-table-column label="我的申请">
+            <el-table-column
+              prop="teamName"
+              label="团队名"
+              width="430">
+            </el-table-column>
+            <el-table-column
+              label="状态">
+              <span style="color:#67C23A">正在申请中</span>
+            </el-table-column>
+          </el-table-column>
+        </el-table>
       </el-tab-pane>
 
       <el-tab-pane v-if="!endMark">
@@ -139,6 +153,7 @@ export default {
       competitionId: "",
       teamMembers: [],
       senders: [],
+      receivers: [],
       userId: "",
       teamId: "",
       teamName: "",
@@ -163,8 +178,16 @@ export default {
       this.nickname = JSON.parse(userStr).nickname
     }
     this.getSenders();
+    this.getReceivers();
   },
   methods: {
+    getReceivers() {
+      competitionApi
+        .getReceivers(this.competitionId, this.userId)
+        .then(response => {
+          this.receivers = response.data.data.receivers
+        })
+    },
     quitTeam() {
       competitionApi
         .quitTeam(this.competitionId, this.userId)
@@ -178,7 +201,7 @@ export default {
     },
     acceptMember(apply_msg) {
       competitionApi
-        .addMember(this.competitionId, apply_msg.senderId, this.teamName)
+        .acceptMember(this.competitionId, apply_msg.senderId,this.userId, this.teamName)
         .then(response => {
           if (response.data.success) {
             this.$message({
@@ -221,15 +244,23 @@ export default {
     },
     applyToJoinTeam(teamName) {
       competitionApi.applyToJoinTeam(this.competitionId, teamName, this.userId).then(response => {
-        this.$message({
-          type: "success",
-          message: "申请成功"
-        });
+        if (response.data.success) {
+          this.$message({
+            type: "success",
+            message: "申请成功"
+          });
+        }
       });
     },
     searchTeams() {
       competitionApi.searchTeams(this.competitionId, this.teamName_key).then(response => {
-        this.teams = response.data.data.teams
+        let teams = response.data.data.teams
+        for (let i = 0; i < teams.length; i++) {
+          if (teams[i].teamName === this.teamName) {
+            teams.splice(i, 1);
+          }
+        }
+        this.teams = teams
         this.searchFlag = true
       });
     },
