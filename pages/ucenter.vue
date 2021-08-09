@@ -48,12 +48,12 @@
                 <span>我的文章</span>
               </router-link>
             </el-menu-item>
-            <el-menu-item index="5">
-              <router-link to="/ucenter/msg/message" tag="li" active-class="current" exact>
-                <i class="el-icon-message"></i>
-                <span>消息管理</span>
-              </router-link>
-            </el-menu-item>
+<!--            <el-menu-item index="5">-->
+<!--              <router-link to="/ucenter/msg/message" tag="li" active-class="current" exact>-->
+<!--                <i class="el-icon-message"></i>-->
+<!--                <span>消息管理</span>-->
+<!--              </router-link>-->
+<!--            </el-menu-item>-->
           </el-menu>
         </aside>
 

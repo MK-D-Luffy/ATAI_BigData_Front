@@ -139,10 +139,24 @@ export default {
   //也就是说是异步返回的数据，所以导致取值不同步，当然获取不到。
   //所以可以通过在watch中监听props的变化，如果有返回值就直接赋值
   watch: {
+    userCompetition: {
+      handler() {
+        if (this.userCompetition !== undefined) {
+          this.userId = this.userCompetition.userId
+          this.teamId = this.userCompetition.teamId
+          this.teamName = this.userCompetition.teamName
+          this.teamLevel = this.userCompetition.teamLevel
+        }
+      },
+      immediate: true,
+      deep: true // 如果是对象要深度监听
+    },
     teamCompetition: {
-      handler(newVal, oldVal) {
+      handler() {
         // console.log(this.teamCompetition)
-        this.teamMembers = this.teamCompetition.friend
+        if (this.teamCompetition !== undefined) {
+          this.teamMembers = this.teamCompetition.friend
+        }
       },
       immediate: true,
       deep: true // 如果是对象要深度监听
@@ -169,10 +183,10 @@ export default {
   },
   created() {
     this.competitionId = this.$route.params.id
-    this.userId = this.userCompetition.userId
-    this.teamId = this.userCompetition.teamId
-    this.teamName = this.userCompetition.teamName
-    this.teamLevel = this.userCompetition.teamLevel
+    // this.userId = this.userCompetition.userId
+    // this.teamId = this.userCompetition.teamId
+    // this.teamName = this.userCompetition.teamName
+    // this.teamLevel = this.userCompetition.teamLevel
     let userStr = cookie.get("ATAI_BigData_ucenter")
     if (userStr) {
       this.nickname = JSON.parse(userStr).nickname
@@ -201,7 +215,7 @@ export default {
     },
     acceptMember(apply_msg) {
       competitionApi
-        .acceptMember(this.competitionId, apply_msg.senderId,this.userId, this.teamName)
+        .acceptMember(this.competitionId, apply_msg.senderId, this.userId, this.teamName)
         .then(response => {
           if (response.data.success) {
             this.$message({

@@ -65,14 +65,36 @@
 <script>
 import MarkdownEditor from '@/components/markdown/MarkdownEditor'
 import blogApi from '@/api/blog'
+import {Message} from "element-ui";  // 引入
 
 export default {
   name: 'BlogWrite',
+  beforeRouteEnter(to, from, next) {
+    let authorId = to.params.authorId
+    if (authorId) {
+      blogApi.getMyArticleList(1, 2).then(response => {
+        let articlesList = response.data.data.records
+        let flag = false
+        for (let article of articlesList) {
+          if (authorId === article.id) {
+            flag = true
+            next()
+          }
+        }
+        if (!flag) {
+          Message.error('您没有权限操作该文章')
+          next("/blog")
+        }
+      })
+    }
+    next()
+  },
+  created() {
+    this.authorId = this.$route.params.authorId
+  },
   mounted() {
-    debugger
-    if (this.$route.params.authorId) {
-      debugger
-      this.getArticleById(this.$route.params.authorId)
+    if (this.authorId) {
+      this.getArticleById(this.authorId)
     }
 
     this.getCategorysAndTags()
@@ -94,6 +116,7 @@ export default {
       categorys: [],
       tags: [],
       // title:'',
+      authorId: '',
       articleForm: {
         id: '',
         title: '',
@@ -158,10 +181,8 @@ export default {
   },
   methods: {
     getArticleById(id) {
-      debugger
       let that = this
       blogApi.viewArticle(id).then(response => {
-        debugger
         Object.assign(that.articleForm, response.data.data.data)
         that.articleForm.editor.value = response.data.data.data.content
         that.articleForm.contentId = response.data.data.data.contentId
@@ -184,7 +205,6 @@ export default {
         this.$message({message: '标题不能大于36个字符', type: 'warning', showClose: true})
         return
       }
-      debugger
       if (!this.articleForm.editor.value) {
         this.$message({message: '内容不能为空哦', type: 'warning', showClose: true})
         return
@@ -194,7 +214,6 @@ export default {
     },
     //文章发布
     publish(articleForm) {
-      debugger
       let that = this
 
       // this.$refs[articleForm].validate((valid) => {
@@ -232,7 +251,7 @@ export default {
       })
 
       blogApi.publishArticle(article).then((response) => {
-        debugger
+        // debugger
         loading.close();
         that.$message({message: '发布成功啦', type: 'success', showClose: true})
         that.$router.push({path: `/blog/${response.data.data.articleId}`})
@@ -262,7 +281,6 @@ export default {
       let that = this
       blogApi.getCategorys()
         .then(response => {
-          debugger
           that.categorys = response.data.data.data
         }).catch(error => {
         if (error !== 'error') {

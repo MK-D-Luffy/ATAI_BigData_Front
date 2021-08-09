@@ -70,9 +70,21 @@ export default {
   //也就是说是异步返回的数据，所以导致取值不同步，当然获取不到。
   //所以可以通过在watch中监听props的变化，如果有返回值就直接赋值
   watch: {
+    userCompetition: {
+      handler() {
+        if (this.userCompetition !== undefined) {
+          this.submitCounts = this.userCompetition.submitCounts;
+        }
+      },
+      immediate: true,
+      //如果是对象要深度监听
+      deep: true
+    },
     teamCompetition: {
-      handler(newVal, oldVal) {
-        this.getTeamCompetition();
+      handler() {
+        if (this.teamCompetition !== undefined) {
+          this.getTeamCompetition();
+        }
       },
       immediate: true,
       //如果是对象要深度监听
@@ -120,7 +132,7 @@ export default {
   },
   created() {
     this.competitionId = this.$route.params.id;
-    this.submitCounts = this.userCompetition.submitCounts;
+    // this.submitCounts = this.userCompetition.submitCounts;
     let userStr = cookie.get("ATAI_BigData_ucenter")
     if (userStr) {
       this.nickname = JSON.parse(userStr).nickname

@@ -17,6 +17,8 @@ module.exports = {
   /*
   ** Customize the progress bar color
   */
+  target: 'server',
+  // target: 'static',
   loading: {color: '#3B8070'},
   /*
   ** Build configuration
@@ -44,13 +46,18 @@ module.exports = {
   plugins: [
     {src: '~/plugins/nuxt-swiper-plugin.js', ssr: false},
     '~/plugins/global.js',
-    {src: "~/plugins/onssr.js", ssr: false},
-    {src: "~/plugins/tinymce.js", ssr: false},
-    '~/plugins/route.js'
+    '~/plugins/router.js',
+    // {src: '~plugins/nuxt-codemirror-plugin.js', ssr: false}
   ],
 
   css: [
     'swiper/dist/css/swiper.css',
-    '@/assets/icon/iconfont.css'
+    '@/assets/icon/iconfont.css',
+    // // lib css
+    // 'codemirror/lib/codemirror.css',
+    // // merge css
+    // 'codemirror/addon/merge/merge.css',
+    // // theme css
+    // 'codemirror/theme/base16-dark.css'
   ]
 }

@@ -125,7 +125,6 @@ export default {
   name: "BlogView",
   created() {
     this.getArticle();
-    debugger;
   },
   watch: {
     $route: "getArticle"
@@ -231,7 +230,6 @@ export default {
       blogApi
         .viewArticle(that.$route.params.id)
         .then(response => {
-          debugger;
           Object.assign(that.article, response.data.data.data);
           // that.article = response.data.data
           that.article.editor.value = response.data.data.data.content;
@@ -255,9 +253,7 @@ export default {
         });
     },
     publishComment() {
-      debugger;
       let that = this;
-      debugger;
       const token = cookie.get("ATAI_BigData_token");
       // 如果未登录，提示登录
       if (token) {
@@ -268,7 +264,7 @@ export default {
         commentApi
           .publishComment(that.comment)
           .then(response => {
-            debugger;
+            // debugger;
             // that.$message({type: 'success', message: '评论成功', showClose: true})
             that.comment.content = "";
             this.getArticle();
@@ -283,7 +279,7 @@ export default {
             }
           });
       } else {
-        debugger;
+        // debugger;
         this.$message({
           type: "error",
           message: "请先登录️再进行下一步操作"
@@ -304,7 +300,7 @@ export default {
         .then(response => {
           // debugger
           that.comments = response.data.data.data;
-          console.log(that.comments);
+          // console.log(that.comments);
         })
         .catch(error => {
           if (error !== "error") {

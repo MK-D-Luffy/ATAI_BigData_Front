@@ -41,7 +41,7 @@
               </div>
               <div class="btn" style="position:absolute;right: 0;width: 15%;">
                 <a v-if="sending" href="javascript:" type="button" @click="getCodeFun()" :value="codeTest"
-                   style="border: none;background-color: none;text-decoration:none">{{ codeTest }}</a>
+                   style="border: none;background: none;text-decoration:none">{{ codeTest }}</a>
                 <span v-else>
                   {{ codeTest }}
                 </span>
@@ -221,12 +221,12 @@ export default {
       if (userStr) {
         this.loginInfo = JSON.parse(userStr)
       }
-      console.log(this.loginInfo.id)
+      // console.log(this.loginInfo.id)
 
       loginApi.getMemberInfoSelf(this.loginInfo.id).then(response => {
         this.memberInfo = response.data.data.memberInfo
       })
-      console.log(this.memberInfo.id)
+      // console.log(this.memberInfo.id)
     },
 
     //微信登录显示的方法

@@ -9,11 +9,11 @@
           <span style="font-size:24px;margin-right:20px;">赛题数据</span>
           <el-tag style="zoom:100%">
             <i class="el-icon-download"/>
-            <a :href="competition.cover">点击下载赛题</a>
+            <a :href="cover">点击下载赛题</a>
           </el-tag>
         </el-form-item>
 
-        <div id="description" v-html="competition.description"></div>
+        <div id="description" v-html="description"></div>
       </el-form>
 
     </section>
@@ -31,11 +31,25 @@ export default {
     baominflag: Boolean,
     competition: Object
   },
+  watch: {
+    competition: {
+      handler() {
+        if (this.competition!==undefined) {
+          this.cover = this.competition.cover
+          this.description = this.competition.description
+        }
+      },
+      immediate: true,
+      deep: true // 如果是对象要深度监听
+    }
+  },
   data() {
     return {
       baomin: "报名比赛",
       teamId: "",
       classList: [],
+      cover: "",
+      description: ""
     };
   },
 };

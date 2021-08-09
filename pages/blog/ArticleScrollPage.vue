@@ -128,17 +128,16 @@ export default {
   },
   methods: {
     gotoPage(page) {
-      console.log(this.articles)
+      // console.log(this.articles)
       // debugger
       blogApi.pageArticleCondition(page, this.limit, this.compObj)
           .then(response => {
-            debugger
+            // debugger
             this.data = response.data.data
             let newArticles = response.data.data.records
             this.articles = []
             if (newArticles && newArticles.length > 0) {
               // this.innerPage.pageNumber += 1
-              debugger
               this.articles = this.articles.concat(newArticles)
               for (let i = 0; i < newArticles.length; i++) {
                 this.articles[i]["tags"] = newArticles[i].tag.split(",")
@@ -158,19 +157,17 @@ export default {
       })
     },
     search(title, begin, end) {
-      console.log(title, begin, end)
+      // console.log(title, begin, end)
       this.compObj.title = title
       this.compObj.begin = begin
       this.compObj.end = end
       blogApi.pageArticleCondition(1, this.limit, this.compObj)
           .then(response => {
-            // debugger
             this.data = response.data.data
             let newArticles = response.data.data.records
             this.articles = []
             if (newArticles && newArticles.length > 0) {
               // this.innerPage.pageNumber += 1
-              // debugger
               this.articles = this.articles.concat(newArticles)
               for (let i = 0; i < newArticles.length; i++) {
                 this.articles[i]["tags"] = newArticles[i].tag.split(",")
@@ -191,19 +188,14 @@ export default {
     },
     //写文章
     write() {
-      debugger
       const token = cookie.get('ATAI_BigData_token')
-      console.log(token)
       // 如果未登录，提示登录
       if (token) {
-        // let authorId=1
-        // this.$router.push({path: `/write/${authorId}`})
         this.$router.push({path: `/write`})
       } else {
-        debugger
         this.$message({
-          type: 'error',
-          message: '请先登录?再进行下一步操作'
+          type: 'info',
+          message: '请先登录再进行下一步操作'
         });
         //vue路由跳转
         this.$router.push({

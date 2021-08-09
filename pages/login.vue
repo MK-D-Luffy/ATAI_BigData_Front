@@ -51,14 +51,11 @@ import '~/assets/css/iconfont.css'
 import cookie from 'js-cookie'
 //引入调用login.js文件
 import loginApi from '@/api/login'
+//引入密码加密文件
+import {Encrypt} from "@/utils/AESUtils";
 
 export default {
   layout: 'sign',
-  // beforeRouteEnter(to, from) {
-  //   console.log("from");
-  //   console.log(from) // 可以拿到 from， 知道上一个路由是什么，从而进行判断
-  //   //在next中写处理函数
-  // },
   data() {
     return {
       //封装登录的手机号和密码对象
@@ -74,6 +71,8 @@ export default {
   methods: {
     //登录的方法
     submitLogin() {
+      //将密码加密
+      this.user.password = Encrypt(this.user.password.trim())
       // debugger
       //调用登录接口 返回token字符串
       loginApi.loginMember(this.user)
@@ -101,7 +100,10 @@ export default {
               // 登录成功后，返回上次进入的页面；
               this.$router.go(-1);
             })
-        })
+        }).catch(error => {
+        console.log(error)
+        this.$message({type: 'warning', message, error})
+      })
     },
 
     checkPhone(rule, value, callback) {

@@ -198,7 +198,7 @@ export default {
   },
   created() {
     // debugger
-    this.compObj.name = this.$route.query.index
+    this.compObj.name = this.$route.query.keyword
     this.getCompetitionList()
     //分类显示
     this.initSubject()
