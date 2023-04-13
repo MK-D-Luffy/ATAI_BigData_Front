@@ -15,20 +15,21 @@
                 <a>首页</a>
               </router-link>
               <router-link to="/competition" tag="li" active-class="current">
-                <a>大数据竞赛</a>
+                <a>竞赛</a>
               </router-link>
-              <router-link to="/member" tag="li" active-class="current">
-                <a>实验室成员</a>
+              <router-link to="/course" tag="li" active-class="current">
+                <a>学习</a>
               </router-link>
               <router-link to="/blog" tag="li" active-class="current">
-                <a>文章论坛</a>
+                <a>论坛</a>
               </router-link>
-              <!--             <router-link to="/codeEditor" tag="li" active-class="current">-->
-              <!--              <a>在线代码编辑器</a>-->
-              <!--            </router-link>-->
-
+              <router-link to="/dataset" tag="li" active-class="current">
+                <a>数据集</a>
+              </router-link>
+              <router-link to="/host" tag="li" active-class="current">
+                <a>我要办赛</a>
+              </router-link>
             </ul>
-            <!-- / nav -->
 
             <ul class="h-r-login">
               <li v-if="!loginInfo.id" id="no-login">
@@ -45,14 +46,17 @@
               <li v-if="loginInfo.id" id="is-login-one" class="mr10">
                 <!--              <a id="headerMsgCountId" href="/ucenter/msg/message" title="消息">-->
                 <a id="headerMsgCountId" href="#" title="消息">
-                  <em class="icon18 news-icon">&nbsp;</em>
+                  <span class="vam ml5">消息</span>
                 </a>
                 <!--              <q class="red-point">&nbsp;</q>-->
               </li>
 
               <li v-if="loginInfo.id" id="is-login-two" class="h-r-user">
                 <a href="/ucenter/info/basic" title>
-                  <el-avatar :size="size" :src=loginInfo.avatar></el-avatar>
+                  <el-avatar style="background-color:#fff;"
+                             :size="size"
+                             :src=loginInfo.avatar>
+                  </el-avatar>
                   <span id="userName" class="vam disIb" style="padding:0 2px">{{ loginInfo.nickname }}</span>
                 </a>
                 <a href="javascript:void(0);" title="退出" @click="logout()" class="ml10">退出</a>
@@ -60,20 +64,20 @@
 
               <!-- /未登录显示第1 li；登录后显示第2，3 li -->
             </ul>
-            <aside class="h-r-search">
-              <form action="#" method="post">
-                <label class="h-r-s-box" style="margin-right:30px">
-                  <input style="width:110px;" type="text" placeholder="输入比赛" v-model="keyword"
-                         name="queryCourse.courseName" value>
-                  <!--                  <router-link :to="{path:'/competition',query: {keyword: this.keyword}}">-->
-                  <!--                 -->
-                  <!--                  </router-link>-->
-                  <button type="submit" class="s-btn" @click="search()">
-                    <em class="icon18">&nbsp;</em>
-                  </button>
-                </label>
-              </form>
-            </aside>
+<!--            <aside class="h-r-search">-->
+<!--              <form action="#" method="post">-->
+<!--                <label class="h-r-s-box" style="margin-right:30px">-->
+<!--                  <input style="width:110px;" type="text" placeholder="输入比赛" v-model="keyword"-->
+<!--                         name="queryCourse.courseName" value>-->
+<!--                  &lt;!&ndash;                  <router-link :to="{path:'/competition',query: {keyword: this.keyword}}">&ndash;&gt;-->
+<!--                  &lt;!&ndash;                 &ndash;&gt;-->
+<!--                  &lt;!&ndash;                  </router-link>&ndash;&gt;-->
+<!--                  <button type="submit" class="s-btn" @click="search()">-->
+<!--                    <em class="icon18">&nbsp;</em>-->
+<!--                  </button>-->
+<!--                </label>-->
+<!--              </form>-->
+<!--            </aside>-->
           </div>
           <aside class="mw-nav-btn">
             <div class="mw-nav-icon"></div>
@@ -124,13 +128,13 @@
             <aside class="fl col-3 tac mt15">
               <section class="gf-tx">
               <span>
-                <a href="https://cqut-1.oss-cn-beijing.aliyuncs.com/IMG_3004%2820210408-205625%29.PNG"><img
+                <a href="https://atai-bigdata.oss-cn-chengdu.aliyuncs.com/2021/atai/1630216606459.jpg"><img
                   src="~/assets/img/wx-icon.png" alt></a>
               </span>
               </section>
               <section class="gf-tx">
               <span>
-                <a href="https://weibo.com/u/6831557553"><img src="~/assets/img/wb-icon.png" alt></a>
+                <a href="https://weibo.com"><img src="~/assets/img/wb-icon.png" alt></a>
               </span>
               </section>
             </aside>
@@ -167,11 +171,8 @@ export default {
       token: '',
       loginInfo: {
         id: '',
-        age: '',
         avatar: '',
-        mobile: '',
         nickname: '',
-        sex: ''
       },
       keyword: '',
       size: "small",
@@ -222,8 +223,8 @@ export default {
 
     //退出  cookie清空
     logout() {
-      cookie.set('ATAI_BigData_ucenter', "", {domain: this.global.ip})
-      cookie.set('ATAI_BigData_token', "", {domain: this.global.ip})
+      cookie.set('ATAI_BigData_ucenter', "")
+      cookie.set('ATAI_BigData_token', "")
       //回首页
       window.location.href = "/"
     },
@@ -231,20 +232,19 @@ export default {
     //微信登录显示的方法
     wxLogin() {
       //把token值放到cookie里面
-      cookie.set('ATAI_BigData_token', this.token, {domain: this.global.ip})
-      cookie.set('ATAI_BigData_ucenter', '', {domain: this.global.ip})
+      cookie.set('ATAI_BigData_token', this.token)
+      cookie.set('ATAI_BigData_ucenter', '')
       //调用接口，根据token值获取用户信息
       loginApi.getLoginMemberInfo()
         .then(response => {
           this.loginInfo = response.data.data.userInfo
-          cookie.set('ATAI_BigData_ucenter', this.loginInfo, {domain: this.global.ip})
+          cookie.set('ATAI_BigData_ucenter', this.loginInfo)
         })
     },
   },
 };
 </script>
-
-<style>
+<style scoped>
 #footer {
   /*background-image: url(../assets/img/v-play-bg.jpg);*/
   background-color: rgb(37, 37, 37);
@@ -254,10 +254,6 @@ export default {
   width: 100%;
   overflow: hidden;
   padding-top: 30px
-}
-
-#font1 {
-  color: #fff;
 }
 
 /*滚动条整体样式*/

@@ -4,146 +4,125 @@ export default {
   //分页查询比赛的方法
   getCompetitionPageList(page, limit, compObj) {
     return request({
-      url: `/atitcompetition/compfront/getCompetitionPageList/${page}/${limit}`,
+      url: `/ataiservice/atai-competition/pageCompetitionCondition/${page}/${limit}`,
       method: 'post',
       data: compObj
     })
   },
-  //查询所有分类的方法
-  getAllSubject() {
-    return request({
-      url: '/atitcompetition/compfront/getAllSubject',
-      method: 'get'
-    })
-  },
-
-  //根据(用户id)token，比赛id查询信息
-  getUserCompetition(competitionId) {
-    return request({
-      url: `/atitcompetition/atai-user-competition/getUserCompetition/${competitionId}`,
-      method: 'get',
-    })
-  },
-
-
-
   // 根据比赛id查询比赛的信息
   getCompetition(competitionId) {
     return request({
-      url: `/atitcompetition/atai-competition/getCompetition/${competitionId}`,
+      url: `/ataiservice/atai-competition/getCompetition/${competitionId}`,
       method: 'get',
     })
   },
-
-  //根据比赛id，团队名称添加团队
-  insertUserCompetition(competitionId) {
+  getTeamPageList(page, limit, name) {
     return request({
-      url: `/atitcompetition/atai-user-competition/insertUserCompetition/${competitionId}`,
-      method: 'get',
+      url: `/ataiservice/atai-competition/pageTeamCondition/${page}/${limit}`,
+      method: 'post',
+      name: name
     })
   },
-
   //根据比赛id，团队id查询信息
-  getTeamCompetition(competitionId, teamId) {
+  getCompetitionTeam(teamId) {
     return request({
-      url: `/atitcompetition/atai-user-competition/getTeamCompetition/${competitionId}/${teamId}`,
+      url: `/ataiservice/atai-competition/getCompetitionTeam/${teamId}`,
       method: 'get',
+    })
+  },
+  getTeamUsers(teamId) {
+    return request({
+      url: `/ataiservice/atai-competition/getTeamUsers/${teamId}`,
+      method: 'get',
+    })
+  },
+  //根据用户id，比赛id查询是否报名比赛信息
+  getTeamByUserCompetition(userId, competitionId) {
+    return request({
+      url: `/ataiservice/atai-competition/getTeamByUserCompetition/${userId}/${competitionId}`,
+      method: 'get',
+    })
+  },
+  getJoinTeamUser(competitionId, teamId) {
+    return request({
+      url: `/ataiservice/atai-competition/getJoinTeamUser/${competitionId}/${teamId}`,
+      method: 'get',
+    })
+  },
+  getRecordsByUserId(competitionId,userId) {
+    return request({
+      url: `/ataiservice/atai-competition/getRecordByUserId/${competitionId}/${userId}`,
+      method: 'get',
+    })
+  },
+  getRecordsByTeamId(competitionId,teamId) {
+    return request({
+      url: `/ataiservice/atai-competition/getRecordByTeamId/${competitionId}/${teamId}`,
+      method: 'get',
+    })
+  },
+  // 添加比赛信息
+  addCompetitionInfo(competitionInfo) {
+    return request({
+      url: `/ataiservice/atai-competition/addCompetition`,
+      method: 'post',
+      data: competitionInfo
+    })
+  },
+
+  // 3.修改比赛信息
+  updateCompetition(competitionInfo) {
+    return request({
+      url: `/atitcompetition/atai-competition/updateCompetition`,
+      method: 'post',
+      data: competitionInfo
+    })
+  },
+
+  attendCompetition(competitionTeam, userId) {
+    return request({
+      url: `/ataiservice/atai-competition/attendCompetition/${userId}`,
+      method: 'post',
+      data: competitionTeam
     })
   },
 
   //根据比赛id，查询所有的排名信息
-  getRanking(competitionId) {
+  getRankList(competitionId) {
     return request({
-      url: `/atitcompetition/atai-user-competition/getRanking/${competitionId}`,
-      method: 'get',
-    })
-  },
-
-  //根据比赛id，团队名，获取当前排名
-  getRank(competitionId, nickname) {
-    return request({
-      url: `/atitcompetition/atai-user-competition/getRank/${competitionId}/${nickname}`,
+      url: `/ataiservice/atai-competition/getRankList/${competitionId}`,
       method: 'get',
     })
   },
 
   //查询当前用户的比赛列表
-  getMyCompetitionList() {
+  getMyCompetitionList(current, limit) {
     return request({
-      url: `/atitcompetition/atai-user-competition/getMyCompetitionList`,
+      url: `/atitcompetition/atai-user-competition/getMyCompetitionList/${current}/${limit}`,
       method: 'get',
     })
   },
 
-  //查询全部比赛分类
-  findAll() {
+  joinTeam(teamJoin) {
     return request({
-      url: `/atitcompetition/atai-comp-level/findAll`,
+      url: `/ataiservice/atai-competition/joinTeam`,
+      method: 'post',
+      data: teamJoin
+    })
+  },
+
+  acceptJoinTeam(userId, competitionId, teamId) {
+    return request({
+      url: `/ataiservice/atai-competition/acceptJoinTeam/${userId}/${competitionId}/${teamId}`,
       method: 'get',
     })
   },
 
-  //通过key查询团队
-  searchTeams(competitionId, teamName_key) {
+  refuseJoinTeam(userId, competitionId, teamId) {
     return request({
-      url: `/atitcompetition/atai-user-competition/searchTeams/${competitionId}/${teamName_key}`,
+      url: `/ataiservice/atai-competition/refuseJoinTeam/${userId}/${competitionId}/${teamId}`,
       method: 'get',
     })
-  },
+  }
 
-  changeTeamName(competitionId, oldTeamId, newTeamName) {
-    return request({
-      url: `/atitcompetition/atai-user-competition/changeTeamName/${competitionId}/${oldTeamId}/${newTeamName}`,
-      method: 'get',
-    })
-  },
-
-  createTeamName(competitionId, userId) {
-    return request({
-      url: `/atitcompetition/atai-user-competition/createTeamName/${competitionId}/${userId}`,
-      method: 'get',
-    })
-  },
-
-  applyToJoinTeam(competitionId, teamName, userId) {
-    return request({
-      url: `/atitcompetition/atai-user-competition/applyToJoinTeam/${competitionId}/${teamName}/${userId}`,
-      method: 'get',
-    })
-  },
-
-  getSenders(competitionId, receiveId) {
-    return request({
-      url: `/atitcompetition/atai-user-competition/getSenders/${competitionId}/${receiveId}`,
-      method: 'get',
-    })
-  },
-
-  acceptMember(competitionId, senderId,userId, newTeamName) {
-    return request({
-      url: `/atitcompetition/atai-user-competition/acceptMember/${competitionId}/${senderId}/${userId}/${newTeamName}`,
-      method: 'get',
-    })
-  },
-
-  refuseMember(competitionId,senderId){
-    return request({
-      url: `/atitcompetition/atai-user-competition/refuseMember/${competitionId}/${senderId}`,
-      method: 'get',
-    })
-  },
-
-  quitTeam(competitionId,userId){
-    return request({
-      url: `/atitcompetition/atai-user-competition/quitTeam/${competitionId}/${userId}`,
-      method: 'get',
-    })
-  },
-
-  getReceivers(competitionId,senderId){
-    return request({
-      url: `/atitcompetition/atai-user-competition/getReceivers/${competitionId}/${senderId}`,
-      method: 'get',
-    })
-  },
 }

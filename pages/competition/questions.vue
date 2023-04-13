@@ -1,11 +1,11 @@
 <template>
-  <div id="aCoursesList" class="questions" style="margin-left:14px;">
+  <div id="aCoursesList" class="questions" style="">
     <!-- 赛题描述 开始 -->
 
-    <section class="container" style="width:98%;margin-top:25px;">
+    <section class="container" style="width:98%;">
 
       <el-form>
-        <el-form-item style="margin-bottom:0" v-if="baominflag">
+        <el-form-item style="margin-bottom:0" v-if="baomingflag">
           <span style="font-size:24px;margin-right:20px;">赛题数据</span>
           <el-tag style="zoom:100%">
             <i class="el-icon-download"/>
@@ -28,7 +28,7 @@ import cookie from "js-cookie";
 export default {
   name: "questions",
   props: {
-    baominflag: Boolean,
+    baomingflag: Boolean,
     competition: Object
   },
   watch: {

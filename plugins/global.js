@@ -4,13 +4,11 @@ const global = {
   install(Vue) {
     Vue.prototype.global = {
       // ip: "127.0.0.1"
-      ip: "localhost"
-      // ip: "192.168.10.1"
-      // ip: "172.16.2.151"
-      // ip: "8.129.73.254"
-      // ip: "baiyunrain.top"
+     // baseURL: "https://baiyunrain.mynatapp.cc:8666"
+     baseURL: "http://localhost:8666"
     }
   }
 }
 
 Vue.use(global)
+

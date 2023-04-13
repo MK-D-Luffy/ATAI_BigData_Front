@@ -1,10 +1,11 @@
 import request from '@/utils/request'
+
 export default {
 
   //查询前五条公告
-  getLatestNotice(){
+  getLatestNotice(type) {
     return request({
-      url: `/eduservice/atai-notice/getLatestNotice`,
+      url: `/ataiservice/atai-notice/getLatestNotice?type=` + type,
       method: 'get',
     })
   },
@@ -12,7 +13,7 @@ export default {
   //查询4热门老师
   getHotTeacher() {
     return request({
-      url: `/eduservice/indexfront/indexHotTeacher`,
+      url: `/ataiservice/indexfront/indexHotTeacher`,
       method: 'get'
     })
   }

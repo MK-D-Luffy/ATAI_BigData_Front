@@ -26,7 +26,7 @@
     <article-item v-for="a in articles" :key="a.id" v-bind="a"></article-item>
     <!-- 公共分页 开始 -->
     <div>
-      <div class="paging">
+      <div class="paging" style="padding: 36px 0 32px">
         <!-- undisable这个class是否存在，取决于数据属性hasPrevious -->
         <a :class="{undisable: !data.hasPrevious}" href="#" title="首页" @click.prevent="gotoPage(1)">首页</a>
 

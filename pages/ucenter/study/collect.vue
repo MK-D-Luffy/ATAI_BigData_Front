@@ -28,7 +28,7 @@
                 <el-button type="success" size="mini">{{ scope.row.category }}</el-button>
               </el-col>
             </el-table-column>
-            <el-table-column label="文章信息" align="center">
+            <el-table-column label="文章名称" align="center">
               <template slot-scope="scope">
                 <div class="info">
                   <div class="title">
@@ -114,8 +114,7 @@ export default {
     gotoPage(page) {
       this.page = page
       blogApi.getMyArticleList(this.page, this.limit).then(response => {
-        debugger
-
+        // debugger
         this.articlesList = response.data.data.records
         this.data = response.data.data
       })

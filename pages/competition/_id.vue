@@ -1,7 +1,7 @@
 <template>
-  <div style="background-color:#fff;">
-    <div class="container" style="padding-bottom: 120px;padding-top: 5px">
-      <section class="i-comp-wrap1">
+  <div class="bg-fa">
+    <div class="container" style="padding-bottom:30px;padding-top: 5px">
+      <section class="bg-ff i-comp-wrap1">
         <el-row :gutter="24">
           <el-col :span="8" justify="start">
             <div class="">&nbsp;</div>
@@ -35,20 +35,20 @@
               <div class="mt10 hLh30 txtOf tac f24">{{ this.competition.participants }}</div>
             </el-col>
             <el-col :span="4" justify="start">
-              <div class="mt10 hLh30 txtOf tac f24">{{ this.deadline }}</div>
+              <div class="mt10 hLh30 txtOf tac f24">{{ this.competition.deadline.substring(0, 10) }}</div>
             </el-col>
             <el-col :span="3" justify="start">
               <div class="mt10 hLh30 txtOf tac f24" style="color:#fa8c16"
-                   v-if="!judgeEnd(this.deadline)">进行中
+                   v-if="!endFlag">进行中
               </div>
               <div class="mt10 hLh30 txtOf tac f24" style="color:#b2b2b2"
                    v-else>已结束
               </div>
             </el-col>
             <el-col :span="3" justify="start">
-              <div v-if="judgeEnd(this.deadline)" class="mt10 hLh30 txtOf tac f24" style="color:#b2b2b2">已结束</div>
+              <div v-if="endFlag" class="mt10 hLh30 txtOf tac f24" style="color:#b2b2b2">已结束</div>
               <div v-else>
-                <el-button text-align="center" v-if="!baominflag" @click="registration()" type="primary">报名比赛
+                <el-button text-align="center" v-if="!attendFlag" @click="registration()" type="primary">报名比赛
                 </el-button>
                 <div class="mt10 hLh30 txtOf tac f24" v-else style="color:#67C23A">已报名</div>
               </div>
@@ -72,39 +72,34 @@
       </span>
       </el-dialog>
 
-      <el-tabs v-model="activeTab" style=" padding: 20px 20px 25px; margin: 15px 0 10px 0;" :tab-position="tabPosition">
-        <el-tab-pane name="tab1" label="赛题与数据">
-          <questions :baominflag="baominflag" :competition="competition"></questions>
+      <el-tabs class="bg-ff" v-model="activeTab" style=" padding: 20px 40px 25px; margin: 25px 0 10px 0;"
+               tab-position="top" @tab-click="changeTab">
+        <el-tab-pane name="tab1">
+          <span class="fsize16" :class="activeTab==='tab1'?'activeTag':'commonTag'" slot="label">赛制和赛题</span>
+          <questions :attendFlag="attendFlag" :competition="competition"></questions>
         </el-tab-pane>
-        <el-tab-pane name="tab2" label="排行榜">
-          <ranking></ranking>
+        <el-tab-pane name="tab2" v-if="attendFlag">
+          <span class="fsize16"  :class="activeTab==='tab2'?'activeTag':'commonTag'" slot="label">参赛队伍</span>
+          <team :endFlag="endFlag" :competitionId="competitionId" :teamId="teamId" :userId="userId"></team>
         </el-tab-pane>
-        <el-tab-pane name="tab3" label="论坛">
+        <el-tab-pane name="tab3" v-if="attendFlag">
+          <span class="fsize16" :class="activeTab==='tab3'?'activeTag':'commonTag'" slot="label">作品提交</span>
+          <submit :endFlag="endFlag" :competitionId="competitionId" :teamId="teamId" :userId="userId"></submit>
+        </el-tab-pane>
+        <el-tab-pane name="tab4">
+          <span class="fsize16" :class="activeTab==='tab4'?'activeTag':'commonTag'" slot="label">交流讨论</span>
           <forum></forum>
         </el-tab-pane>
-        <el-tab-pane name="tab4" v-if="baominflag" label="提交结果">
-          <submitRes :endMark="judgeEnd(this.deadline)"
-                     :userCompetition="userCompetition"
-                     :teamCompetition="teamCompetition"></submitRes>
-        </el-tab-pane>
-        <el-tab-pane name="tab5" v-if="baominflag" label="我的团队">
-          <team :endMark="judgeEnd(this.deadline)"
-                :userCompetition="userCompetition"
-                :teamCompetition="teamCompetition"></team>
-        </el-tab-pane>
       </el-tabs>
-
     </div>
   </div>
 </template>
 <script>
 //引入调用competition.js文件
 import competitionApi from "@/api/competition";
-import loginApi from "@/api/login";
 import questions from "@/pages/competition/questions";
-import ranking from "@/pages/competition/ranking";
 import forum from "@/pages/competition/forum";
-import submitRes from "@/pages/competition/submitRes"
+import submit from "@/pages/competition/submit"
 import team from "@/pages/competition/team"
 //引入调用js-cookie
 import cookie from "js-cookie";
@@ -114,43 +109,101 @@ export default {
   inject: ['reload'],
   components: {
     questions: questions,
-    ranking: ranking,
     forum: forum,
-    submitRes: submitRes,
+    submit: submit,
     team: team
   },
   data() {
     return {
-      tabPosition: "left",
-      competitionId: "",
-      competition: {},
-      deadline: "",
-      baominflag: false,
+      competitionId: '',
+      userId: '',
+      teamId: '',
+      competition: {
+        deadline: ''
+      },
+      // competitionTeam: {
+      //   competitionId: '',
+      //   avatar: 'https://www.datafountain.cn/_df_static/img/avatar.f744cf3.jpg',
+      //   name: 'default_'
+      // },
       userCompetition: {},
-      teamCompetition: {},
+      endFlag: false,
+      attendFlag: false,
       dialogVisible: false,
-      teamId: "",
       activeTab: "tab1"
     };
   },
   created() {
+    this.activeTab = cookie.get("activeTab")
     this.competitionId = this.$route.params.id;
     //查询比赛的信息
     this.getCompetition(this.competitionId);
-    //查询用户在这个比赛中的信息
-    this.getUserCompetition(this.competitionId);
+
+    const loginCookie = cookie.get("ATAI_BigData_ucenter")
+    //如果已经成功登录,则查询报名队伍信息
+    if (loginCookie !== undefined) {
+      let loginInfo = JSON.parse(loginCookie)
+      this.userId = loginInfo.id
+      this.getTeamByUserCompetition(this.userId, this.competitionId);
+    }
+
   },
   methods: {
-    //获取团队的信息(在teamId赋值后)
-    getTeamCompetition() {
-      // debugger
+    changeTab(tab, event) {
+      // this.activeTab = tab.name
+      cookie.set("activeTab", tab.name)
+    },
+    //比赛详情的方法
+    getCompetition(competitionId) {
       competitionApi
-        .getTeamCompetition(this.competitionId, this.teamId)
+        .getCompetition(competitionId)
         .then(response => {
-          this.teamCompetition = response.data.data.teamCompetition;
+          //请求成功
+          if (response.data.data.competition != null) {
+            this.competition = response.data.data.competition;
+
+            let deadline = this.competition.deadline.substring(0, 10);
+            let time = new Date(deadline)
+            let now = new Date();
+            this.endFlag = time < now
+          }
+        })
+        .catch(error => {
+          //请求失败
+          this.$message({
+            type: "error",
+            message: "请求失败111"
+          });
         });
     },
-
+    //根据用户id，比赛id查询信息
+    getTeamByUserCompetition() {
+      competitionApi
+        .getTeamByUserCompetition(this.userId, this.competitionId)
+        .then(response => {
+          const teamUser = response.data.data.teamUser
+          if (teamUser !== null) {
+            this.attendFlag = true;
+            this.teamId = teamUser.teamId
+          }
+        })
+        .catch(error => {
+          //请求失败
+          this.$message({
+            type: "error",
+            message: "请求失败222"
+          });
+        });
+    },
+    // //获取团队的信息(在teamId赋值后)
+    // getCompetitionTeam() {
+    //   competitionApi
+    //     .getCompetitionTeam(this.competitionId, this.userId)
+    //     .then(response => {
+    //       console.log(response.data.data)
+    //       this.competitionTeam = response.data.data.data;
+    //     });
+    // },
     //判断是否已经截止,已经截止返回true
     judgeEnd(deadline) {
       let time = new Date(deadline)
@@ -181,13 +234,12 @@ export default {
     // 确认报名
     confirm() {
       this.dialogVisible = false;
+      this.competitionTeam.name += Math.random().toString(36).slice(-8)
+      this.competitionTeam.competitionId = this.competitionId
       //根据比赛id，团队名称添加团队
       competitionApi
-        .insertUserCompetition(this.competitionId)
+        .attendCompetition(this.competitionTeam, this.userId)
         .then(response => {
-          //请求成功
-          // debugger;
-          this.teamId = response.data.data.teamId;
           this.$message({
             type: "success",
             message: "报名成功"
@@ -209,54 +261,7 @@ export default {
         type: "info",
         message: "取消操作"
       });
-    },
-
-    //比赛详情的方法
-    getCompetition(competitionId) {
-      // debugger
-      competitionApi
-        .getCompetition(competitionId)
-        .then(response => {
-          //请求成功
-          if (response.data.data.competition != null) {
-            this.competition = response.data.data.competition;
-            this.deadline = this.competition.deadline.substring(0, 10);
-          }
-        })
-        .catch(error => {
-          //请求失败
-          this.$message({
-            type: "error",
-            message: "请求失败111"
-          });
-        });
-    },
-    //根据用户id，比赛id查询信息
-    getUserCompetition(competitionId) {
-      competitionApi
-        .getUserCompetition(competitionId)
-        .then(response => {
-          // debugger
-          //请求成功
-          if (response.data.data.userCompetition != null) {
-            this.baominflag = true;
-            this.userCompetition = response.data.data.userCompetition;
-            this.teamId = this.userCompetition.teamId;
-
-            // console.log(this.userCompetition)
-
-            //获取所在团队的信息
-            this.getTeamCompetition();
-          }
-        })
-        .catch(error => {
-          //请求失败
-          this.$message({
-            type: "error",
-            message: "请求失败222"
-          });
-        });
-    },
+    }
   }
 };
 </script>
@@ -265,5 +270,14 @@ export default {
   font-size: 17px;
   height: 50px;
   line-height: 50px;
+}
+
+.activeTag {
+  color: black;
+  font-weight: 600;
+}
+
+.commonTag {
+  color: rgb(144, 147, 153);
 }
 </style>

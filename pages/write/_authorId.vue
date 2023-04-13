@@ -82,7 +82,7 @@ export default {
           }
         }
         if (!flag) {
-          Message.error('您没有权限操作该文章')
+          Message.error({message: '您没有权限操作该文章', duration: 2500, showClose: true})
           next("/blog")
         }
       })

@@ -24,12 +24,20 @@
             highlight-current-row>
             <el-table-column label="比赛类型" width="150" align="center">
               <template slot-scope="scope">
-                <el-button type="success" size="mini">{{ scope.row.level }}</el-button>
+                <el-button size="mini" style="pointer-events: none;"
+                           class="greenBtn"
+                           :class="[{greenBtn:scope.row.level==='新人赛'},
+                                          {redBtn: scope.row.level==='程序设计大赛'},
+                                          {orangeBtn:scope.row.level==='算法大赛'},
+                                          {purpleBtn:scope.row.level==='创新应用大赛'}]">
+                  {{ scope.row.level }}
+                </el-button>
+                <!--                <el-button type="success" size="mini"></el-button>-->
               </template>
             </el-table-column>
-            <el-table-column label="比赛信息" align="center" style="cursor:pointer;">
+            <el-table-column label="比赛名称" align="center" style="cursor:pointer;">
               <template slot-scope="scope">
-                <div class="info" >
+                <div class="info">
                   <div class="title">
                     <a @click="view(scope.row.id)" class="compinfo">{{ scope.row.name }}</a>
                   </div>
@@ -68,17 +76,20 @@ export default {
   data() {
     return {
       competitionList: [],
+      greenBtn: 'greenBtn',
+      redBtn: 'redBtn',
+      orangeBtn: 'orangeBtn',
+      purpleBtn: 'purpleBtn'
     }
   },
 
   created() {
-    this.fetchcompetitionList()
+    this.fetchCompetitionList()
   },
 
   methods: {
-    fetchcompetitionList() {
-      competitionApi.getMyCompetitionList().then(response => {
-        debugger
+    fetchCompetitionList() {
+      competitionApi.getMyCompetitionList(1, 10).then(response => {
         this.competitionList = response.data.data.data
       })
     },
@@ -92,5 +103,29 @@ export default {
 .compinfo:hover {
   color: #ff6a00;
   text-decoration: none;
+}
+
+.greenBtn {
+  color: #FFF;
+  background-color: #67C23A;
+  border-color: #67C23A;
+}
+
+.redBtn {
+  color: #FFF;
+  background-color: #ff4d4f;
+  border-color: #ff4d4f;
+}
+
+.orangeBtn {
+  color: #FFF;
+  background-color: rgb(246, 179, 80);
+  border-color: rgb(246, 179, 80);
+}
+
+.purpleBtn {
+  color: #FFF;
+  background-color: rgb(114, 101, 230);
+  border-color: rgb(114, 101, 230);
 }
 </style>

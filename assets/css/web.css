@@ -196,7 +196,7 @@
 
 .i-q-txt {
   height: 20px;
-  line-height: 200%;
+  line-height: 120%;
   overflow: hidden
 }
 
@@ -232,7 +232,7 @@
   background: #fff;
   border: 1px solid transparent;
   display: block;
-  margin: 0 0 50px 30px;
+  margin: 0 0 40px 30px;
   overflow: hidden;
   text-align: center;
   padding: 15px 15px 20px;
@@ -256,7 +256,7 @@
 
 .i-teach-wrap .i-q-txt {
   border-top: 1px dotted #e2e2e2;
-  padding-top: 15px
+  padding-top: 10px;
 }
 
 .i-teach-wrap:hover {
@@ -296,7 +296,8 @@
   background: #fff;
   border: 1px solid #e8e8e8;
   display: block;
-  margin: 25px 0 35px 30px;
+  /*margin: 25px 0 35px 30px;*/
+  margin-top: 20px;
   overflow: hidden;
   text-align: center;
   padding: 20px 20px 25px;
@@ -801,7 +802,7 @@
 }
 
 .i-q-txt {
-  height: 40px;
+  height: 36px;
   overflow: hidden
 }
 

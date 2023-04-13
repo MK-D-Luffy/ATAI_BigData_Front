@@ -3,7 +3,8 @@ import VueCodemirror from 'vue-codemirror'
 
 // language
 import 'codemirror/mode/vue/vue.js'
-// import 'codemirror/mode/vue/vue.js'
+import 'codemirror/mode/python/python.js'
+// import 'codemirror/mode/java/java'
 
 // active-line.js
 import 'codemirror/addon/selection/active-line.js'
@@ -39,5 +40,9 @@ import 'codemirror/addon/fold/markdown-fold.js'
 import 'codemirror/addon/fold/xml-fold.js'
 
 // more...
+import 'codemirror/addon/hint/show-hint.js'
+import 'codemirror/addon/hint/javascript-hint.js'
+import 'codemirror/addon/hint/sql-hint.js'
+// import 'codemirror/addon/hint/python-hint.js'
 
 Vue.use(VueCodemirror)

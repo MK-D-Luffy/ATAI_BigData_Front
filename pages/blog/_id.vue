@@ -19,7 +19,7 @@
                 </div>
               </div>
               <el-button
-                v-if="this.loginInfo.id==this.article.authorId"
+                v-if="this.loginInfo.id===this.article.authorId"
                 @click="editArticle()"
                 style="position: absolute;left: 82%;top:265px"
                 type="primary"
@@ -29,7 +29,7 @@
               >编辑
               </el-button>
               <el-button
-                v-if="this.loginInfo.id==this.article.authorId"
+                v-if="this.loginInfo.id===this.article.authorId"
                 @click="removeArticle()"
                 style="position: absolute;left: 75%;top:265px;"
                 type="danger"
@@ -234,7 +234,7 @@ export default {
           // that.article = response.data.data
           that.article.editor.value = response.data.data.data.content;
           that.article.tags = that.article.tag.split(",");
-          var userStr = cookie.get("ATAI_BigData_ucenter");
+          let userStr = cookie.get("ATAI_BigData_ucenter");
           //userStr是字符串   需要转换为json对象
           if (userStr) {
             this.loginInfo = JSON.parse(userStr);

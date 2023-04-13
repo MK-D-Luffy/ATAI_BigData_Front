@@ -3,7 +3,7 @@
   <div ref="scroll" id="scroll-page" style="overflow: hidden">
     <slot></slot>
     <div
-      style="height: 40px;margin-top: 10px;z-index: 1"
+      style="height: 0;margin-top: 10px;z-index: 1"
       v-loading="loading"
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"

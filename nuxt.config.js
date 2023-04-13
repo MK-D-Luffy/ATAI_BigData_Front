@@ -47,17 +47,20 @@ module.exports = {
     {src: '~/plugins/nuxt-swiper-plugin.js', ssr: false},
     '~/plugins/global.js',
     '~/plugins/router.js',
-    // {src: '~plugins/nuxt-codemirror-plugin.js', ssr: false}
+    {src: '~/plugins/nuxt-codemirror-plugin.js', ssr: false},
+    {src: '~/plugins/emoji.client.js'}
   ],
 
   css: [
     'swiper/dist/css/swiper.css',
     '@/assets/icon/iconfont.css',
     // // lib css
-    // 'codemirror/lib/codemirror.css',
+    'codemirror/lib/codemirror.css',
     // // merge css
-    // 'codemirror/addon/merge/merge.css',
+    'codemirror/addon/merge/merge.css',
+    'codemirror/addon/hint/show-hint.css',
     // // theme css
-    // 'codemirror/theme/base16-dark.css'
+    'codemirror/theme/idea.css',
+    'codemirror/theme/solarized.css',
   ]
 }

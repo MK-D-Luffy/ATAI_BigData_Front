@@ -18,7 +18,7 @@
     name: 'CardMe',
     data() {
       return {
-        qq: {title: 'QQ', message: '919431514'},
+        qq: {title: 'QQ', message: '1905470291@qq.com'},
         github: {
           title: 'github',
           message: '<a target="_blank" href="https://github.com/shimh-develop">https://github.com/shimh-develop</a>'

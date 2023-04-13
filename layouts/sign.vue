@@ -1,5 +1,5 @@
 <template>
-  <div class="sign">
+  <div class="sign" style="margin-top:150px">
     <!--标题-->
     <!-- <div class="logo">
       <img src="~/assets/img/logo.png" alt="logo" href="/">

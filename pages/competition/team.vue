@@ -1,240 +1,272 @@
 <template>
-  <div class="container" style="width: 90%;margin-top:15px;">
+  <el-container class="mt10" style="min-height: 500px">
+    <el-aside width="160px" class="mr30" style="border-right: 1px solid rgb(235, 238, 245)">
+      <el-menu
+        :default-active="teamIndex"
+        text-color="rgb(149, 152, 157)">
+        <el-menu-item @click="setTeamIndex('1')" index="1">
+          <span>我的队伍</span>
+        </el-menu-item>
+        <el-menu-item v-if="!endFlag" @click="setTeamIndex('2')" index="2">
+          <span>全部队伍</span>
+        </el-menu-item>
+        <el-menu-item v-if="!endFlag" @click="setTeamIndex('3')" index="3">
+          <span>组队申请</span>
+        </el-menu-item>
+      </el-menu>
+    </el-aside>
+    <el-main v-if="teamIndex==='1'">
+      <el-card>
+        <el-row>
+          <el-col :span="3" justify="start">
+            <el-image
+              style="width: 90px; height: 90px;margin-right:10px;border-radius:5px"
+              :src="competitionTeam.avatar"
+              fit="fill"
+            ></el-image>
+          </el-col>
+          <el-col :span=18>
+            <div class="pb10 fsize16 fw6">
+              {{ competitionTeam.name }}
+            </div>
+            <div class="pb10 fsize14">
+              <span v-if="competitionTeam.intro!==null">
+                {{ competitionTeam.intro }}
+              </span>
+              <span v-else>暂无队伍宣言，请完善</span>
+            </div>
+          </el-col>
+          <el-col :span="3">
+            <div style="align-items: center;color:rgb(144, 147, 153)">开放组队申请</div>
+            <el-switch
+              class="ml20"
+              v-model="isAllowed">
+            </el-switch>
+          </el-col>
+        </el-row>
+      </el-card>
 
-    <div style="margin-bottom:20px">
-      <div style="font-size: 24px;width:82%;display: inline-block;height: 44px">
-        <span>我{{ this.teamLevel === 1 ? "组织" : "加入" }}的团队:
-          <span v-if="!editFlag">
-          {{ teamName }}
-          </span>
-           <el-input v-else v-model="teamName" style="width:30%" placeholder="请输入团队名"></el-input>
-        </span>
+      <div class="fsize16 fw6" style="margin: 20px 0">队伍成员</div>
+      <el-card v-for="teamUser in teamUsers" :key="teamUser.id" class="mb20"
+               :class="teamUser.isLeader===1?'leaderTag':''">
+        <el-row>
+          <el-col :span="3" justify="start">
+            <el-image
+              style="width: 90px; height: 90px;margin-right:10px;border-radius:5px"
+              src="https://www.datafountain.cn/_df_static/img/avatar.f744cf3.jpg"
+              fit="fill"
+            ></el-image>
+          </el-col>
+          <el-col :span=18>
+            <div class="pb10 fsize16 fw6">
+              {{ teamUser.name }}
+            </div>
+            <div class="pb10 fsize14">
+              <span v-if="teamUser.intro!==null">
+                {{ teamUser.intro }}
+              </span>
+              <span v-else>这个人很懒，还没有留下自我宣言</span>
+            </div>
+          </el-col>
+        </el-row>
+      </el-card>
+    </el-main>
 
+
+    <el-main v-else-if="teamIndex==='2'">
+      <el-input placeholder="请输入队伍名" v-model="name" style="width:300px" class="mb20">
+        <el-button slot="append" icon="el-icon-search" @click="gotoPage(1)"></el-button>
+      </el-input>
+      <el-card v-for="team in teamList.items" :key="team.id" class="mb20">
+        <el-row>
+          <el-col :span="4" justify="start">
+            <el-image
+              style="width: 105px; height: 105px;margin-right:10px;border-radius:5px"
+              src="https://www.datafountain.cn/_df_static/img/avatar.f744cf3.jpg"
+              fit="fill"
+            ></el-image>
+          </el-col>
+          <el-col :span=17>
+            <div class="pb10 fsize16 fw6">
+              {{ team.name }}
+            </div>
+            <div class="pb5">
+              <el-avatar size="small" v-for="user in team.users" :key="user.id" class="mr5"
+                         src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+            </div>
+            <div class="fsize14" style="color:rgb(144, 147, 153)">
+              <span v-if="team.intro!==null">
+                {{ team.intro }}
+              </span>
+              <span v-else>暂无队伍宣言，请完善</span>
+            </div>
+          </el-col>
+          <el-col :span="3">
+            <el-button type="primary" @click="joinTeam(team.id)">申请加入</el-button>
+          </el-col>
+        </el-row>
+      </el-card>
+      <!-- 公共分页 开始 -->
+      <div>
+        <div class="paging">
+          <!-- undisable这个class是否存在，取决于数据属性hasPrevious -->
+          <a :class="{undisable: !teamList.hasPrevious}" style="width:50px" href="#" title="首页"
+             @click.prevent="gotoPage(1)">首页</a>
+
+          <a :class="{undisable: !teamList.hasPrevious}" href="#" title="前一页"
+             @click.prevent="gotoPage(teamList.current-1)">&lt;</a>
+
+          <a v-for="page in teamList.pages" :key="page"
+             :class="{current: teamList.current === page, undisable: teamList.current === page}"
+             :title="'第'+page+'页'" href="#" @click.prevent="gotoPage(page)">{{ page }}</a>
+
+          <a :class="{undisable: !teamList.hasNext}" href="#" title="后一页"
+             @click.prevent="gotoPage(teamList.current+1)">&gt;</a>
+
+          <a :class="{undisable: !teamList.hasNext}" style="width:50px" href="#" title="末页"
+             @click.prevent="gotoPage(teamList.pages)">末页</a>
+
+          <div class="clear"/>
+        </div>
       </div>
-      <!--如果日期截止或者团队名可编辑则切换状态-->
-      <span v-if="!endMark" style="margin-top:5px" class="fr">
-        <span v-if="teamLevel===1">
-            <span v-if="!editFlag">
-                  <el-button type="primary" @click="editFlag=true">编辑</el-button>
-            </span>
-            <span v-else>
-                <el-button type="success" @click="changeTeamName">确认</el-button>
-                <el-button type="info" @click="editFlag=false">取消</el-button>
-            </span>
-        </span>
-        <span v-else>
-            <el-button type="danger" @click="quitTeam">离开队伍</el-button>
-        </span>
-      </span>
-
-    </div>
-    <el-tabs type="border-card">
-      <el-tab-pane>
-        <span slot="label" style="display: block;text-align: center; width: 120px!important;"> 团队成员</span>
-        <!--团队管理-->
-        <el-table
-          :data="teamMembers"
-          style="width: 100%">
-          <el-table-column
-            prop="nickname"
-            label="团队成员昵称"
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="email"
-            label="邮箱"
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="sign"
-            label="个性签名">
-          </el-table-column>
-          <el-table-column
-            v-if="teamLevel===1"
-            width="100"
-            label="操作">
-            <template slot-scope="scope">
-              <el-button v-if="!(scope.row.nickname===nickname)"
-                         plain size="mini"
-                         @click="deleteTeamMember(scope.row.id)">删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-
-        <el-table v-if="senders.length!==0" :data="senders">
-          <el-table-column label="收到邀请函">
-            <el-table-column
-              prop="senderName"
-              label="昵称"
-              width="430">
-            </el-table-column>
-            <el-table-column
-              label="状态">
-              <template slot-scope="scope">
-                <el-button type="primary" plain size="mini" @click="acceptMember(scope.row)">接受</el-button>
-                <el-button type="danger" plain size="mini" @click="refuseMember(scope.row)">拒绝</el-button>
-              </template>
-            </el-table-column>
-          </el-table-column>
-        </el-table>
-
-        <el-table v-if="receivers.length!==0" :data="receivers">
-          <el-table-column label="我的申请">
-            <el-table-column
-              prop="teamName"
-              label="团队名"
-              width="430">
-            </el-table-column>
-            <el-table-column
-              label="状态">
-              <span style="color:#67C23A">正在申请中</span>
-            </el-table-column>
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-
-      <el-tab-pane v-if="!endMark">
-        <span slot="label" style="display: block;text-align: center; width: 120px!important;"> 加入一个团队</span>
-        <div style="padding:32px 0 24px 15px">
-          申请加入团队
-          <el-input v-model="teamName_key" style="width:30%;margin: 0 10px" placeholder="请输入队伍名称"></el-input>
-          <el-button icon="el-icon-search" @click="searchTeams" circle></el-button>
-        </div>
-        <div>
-          <el-table v-if="searchFlag" :data="teams" style="width:50%" :show-header="false">
-            <el-table-column prop="teamName" align="center" width="240"></el-table-column>
-            <el-table-column align="center">
-              <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="applyToJoinTeam(scope.row.teamName)">申请加入</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-      </el-tab-pane>
-
-    </el-tabs>
-  </div>
+      <!-- 公共分页 结束 -->
+    </el-main>
+    <el-main v-else>
+      <el-card v-for="joinTeamUser in joinTeamUsers" :key="joinTeamUser.id" class="mb20">
+        <el-row>
+          <el-col :span="3" justify="start">
+            <el-image
+              style="width: 90px; height: 90px;margin-right:10px;border-radius:5px"
+              src="https://www.datafountain.cn/_df_static/img/avatar.f744cf3.jpg"
+              fit="fill"
+            ></el-image>
+          </el-col>
+          <el-col :span=18>
+            <div class="pb10 fsize16 fw6">
+              {{ joinTeamUser.name }}
+            </div>
+            <div class="pb10 fsize14">
+              <span v-if="joinTeamUser.intro!==null">
+                {{ joinTeamUser.intro }}
+              </span>
+              <span v-else>这个人很懒，还没有留下自我宣言</span>
+            </div>
+          </el-col>
+          <el-col :span="3">
+            <el-row>
+              <el-col class="mt10 mb20" :span="24">
+                <el-button size="mini" type="primary" @click="acceptJoinTeam(joinTeamUser.userId)">允许加入</el-button>
+              </el-col>
+              <el-col :span="24">
+                <el-button size="mini" type="danger" @click="refuseJoinTeam(joinTeamUser.userId)">拒绝加入</el-button>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+      </el-card>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
-//引入调用competition.js文件
 import competitionApi from "@/api/competition";
-//引入调用js-cookie
-import cookie from 'js-cookie'
 
 export default {
   name: "team",
   inject: ['reload'],
   props: {
-    //比赛截止标志,如果截止则为true
-    endMark: {
-      type: Boolean,
-      default: true
-    },
-    userCompetition: Object,
-    teamCompetition: Object,
-  },
-  //因为父组件props传给子组件的值是通过后端接口返回的数据，
-  //也就是说是异步返回的数据，所以导致取值不同步，当然获取不到。
-  //所以可以通过在watch中监听props的变化，如果有返回值就直接赋值
-  watch: {
-    userCompetition: {
-      handler() {
-        if (this.userCompetition !== undefined) {
-          this.userId = this.userCompetition.userId
-          this.teamId = this.userCompetition.teamId
-          this.teamName = this.userCompetition.teamName
-          this.teamLevel = this.userCompetition.teamLevel
-        }
-      },
-      immediate: true,
-      deep: true // 如果是对象要深度监听
-    },
-    teamCompetition: {
-      handler() {
-        // console.log(this.teamCompetition)
-        if (this.teamCompetition !== undefined) {
-          this.teamMembers = this.teamCompetition.friend
-        }
-      },
-      immediate: true,
-      deep: true // 如果是对象要深度监听
-    }
+    endFlag: Boolean,
+    competitionId: String,
+    teamId: String,
+    userId: String
   },
   data() {
     return {
-      competitionId: "",
-      teamMembers: [],
-      senders: [],
-      receivers: [],
-      userId: "",
-      teamId: "",
-      teamName: "",
-      teamLevel: 0,
-      nickname: "",
-      // 用于根据团队名查找其他团队时使用
-      teamName_key: "",
-      teams: [],
+      competitionTeam: {
+        avatar: '',
+        name: '',
+        intro: '',
+        isAllowed:1
+      },
+      isAllowed:true,
+      teamUsers: [],
+      name: '',
+      teamList: [],
+      joinTeamUsers: [],
       //是否进行编辑
       editFlag: false,
       searchFlag: false,
+      teamIndex: '1',
+      page: 1,
+      limit: 5
     }
   },
   created() {
-    this.competitionId = this.$route.params.id
-    // this.userId = this.userCompetition.userId
-    // this.teamId = this.userCompetition.teamId
-    // this.teamName = this.userCompetition.teamName
-    // this.teamLevel = this.userCompetition.teamLevel
-    let userStr = cookie.get("ATAI_BigData_ucenter")
-    if (userStr) {
-      this.nickname = JSON.parse(userStr).nickname
-    }
-    this.getSenders();
-    this.getReceivers();
+    this.getCompetitionTeam()
+    this.getTeamUsers();
+    this.getTeamList()
+    this.getJoinTeamUser()
   },
   methods: {
-    getReceivers() {
-      competitionApi
-        .getReceivers(this.competitionId, this.userId)
-        .then(response => {
-          this.receivers = response.data.data.receivers
+    setTeamIndex(index) {
+      this.teamIndex = index
+    },
+    getCompetitionTeam() {
+      competitionApi.getCompetitionTeam(this.teamId)
+        .then(response => { //请求成功
+          this.competitionTeam = response.data.data.data
+        })
+        .catch(error => { //请求失败
+          console.log(error)
         })
     },
-    quitTeam() {
+    getTeamList(page = 1) { //比赛列表的方法
+      this.page = page
+      competitionApi.getTeamPageList(this.page, this.limit, this.name)
+        .then(response => { //请求成功
+          this.teamList = response.data.data
+        })
+        .catch(error => { //请求失败
+          console.log(error)
+        })
+    },
+    getTeamUsers() {
       competitionApi
-        .quitTeam(this.competitionId, this.userId)
+        .getTeamUsers(this.teamId)
         .then(response => {
+          this.teamUsers = response.data.data.users
+          // this.receivers = response.data.data.receivers
+        })
+    },
+    gotoPage(page) {
+      competitionApi.getTeamPageList(page, this.limit, this.name)
+        .then(response => {
+          this.teams = response.data.data
+        })
+    },
+    joinTeam(teamId) {
+      let teamJoin = {}
+      teamJoin.userId = this.userId
+      teamJoin.competitionId = this.competitionId
+      teamJoin.teamId = teamId
+      competitionApi.joinTeam(teamJoin).then(response => {
+        if (response.data.success) {
           this.$message({
             type: "success",
-            message: "退出成功"
+            message: "申请成功"
           });
-          this.reload()
-        })
+        }
+      });
     },
-    acceptMember(apply_msg) {
-      competitionApi
-        .acceptMember(this.competitionId, apply_msg.senderId, this.userId, this.teamName)
+    getJoinTeamUser() {
+      competitionApi.getJoinTeamUser(this.competitionId, this.teamId)
         .then(response => {
-          if (response.data.success) {
-            this.$message({
-              type: "success",
-              message: "添加成功"
-            });
-            this.reload();
-          } else {
-            this.$message({
-              type: "success",
-              message: "添加失败"
-            });
-            this.reload();
-          }
-        })
+          this.joinTeamUsers = response.data.data.users
+        });
     },
-    refuseMember(apply_msg) {
+    acceptJoinTeam(userId) {
       competitionApi
-        .refuseMember(this.competitionId, apply_msg.senderId)
+        .acceptJoinTeam(userId, this.competitionId, this.teamId)
         .then(response => {
           if (response.data.success) {
             this.$message({
@@ -251,33 +283,26 @@ export default {
           }
         })
     },
-    getSenders() {
-      competitionApi.getSenders(this.competitionId, this.userId).then(response => {
-        this.senders = response.data.data.senders;
-      });
-    },
-    applyToJoinTeam(teamName) {
-      competitionApi.applyToJoinTeam(this.competitionId, teamName, this.userId).then(response => {
-        if (response.data.success) {
-          this.$message({
-            type: "success",
-            message: "申请成功"
-          });
-        }
-      });
-    },
-    searchTeams() {
-      competitionApi.searchTeams(this.competitionId, this.teamName_key).then(response => {
-        let teams = response.data.data.teams
-        for (let i = 0; i < teams.length; i++) {
-          if (teams[i].teamName === this.teamName) {
-            teams.splice(i, 1);
+    refuseJoinTeam(userId) {
+      competitionApi
+        .refuseJoinTeam(userId, this.competitionId, this.teamId)
+        .then(response => {
+          if (response.data.success) {
+            this.$message({
+              type: "success",
+              message: "操作成功"
+            });
+            this.reload();
+          } else {
+            this.$message({
+              type: "success",
+              message: "操作失败"
+            });
+            this.reload();
           }
-        }
-        this.teams = teams
-        this.searchFlag = true
-      });
+        })
     },
+
     changeTeamName() {
       competitionApi.changeTeamName(this.competitionId, this.teamId, this.teamName).then(response => {
         if (response !== undefined) {
@@ -297,41 +322,45 @@ export default {
         }
       });
     },
-    //通过修改该用户的团队名实现删除
-    deleteTeamMember(userId) {
-      this.$confirm('请确认删除成员！', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        competitionApi.createTeamName(this.competitionId, userId).then(response => {
-          if (response !== undefined) {
-            if (response.data.success) {
-              this.$message({
-                type: "success",
-                message: "删除成功"
-              });
-              this.reload();
-            } else if (!response.data.success) {
-              this.$message({
-                type: "error",
-                message: response.message
-              });
-            }
-          }
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
-      });
-    }
   }
 }
 </script>
 <style>
 .el-table thead.is-group th {
   background: #fff;
+}
+
+.el-menu {
+  border-right: none;
+}
+
+.el-menu {
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+}
+
+.el-menu-item {
+  border-top: 1px solid #fff;
+  /*padding: 4px 8px;*/
+  /*height: 42px;*/
+}
+
+.el-menu-item:hover {
+  color: rgb(0, 112, 248) !important;
+  /*background-color: #1956A5 !important;*/
+}
+
+.el-menu-item span {
+  font-size: 14px;
+}
+
+.el-menu .is-active {
+  color: rgb(0, 112, 248);
+  background-color: rgb(242, 248, 250) !important;
+  border-left: 3px solid #0070f8;
+}
+
+.leaderTag {
+  border-top: 3px solid rgb(230, 162, 60);
 }
 </style>

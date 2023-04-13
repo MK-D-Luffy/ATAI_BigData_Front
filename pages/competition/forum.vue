@@ -1,49 +1,61 @@
 <template>
-  <div>
-    <section class="container">
-      <el-container class="me-view-container">
-        <el-main>
-          <div class="me-view-card">
-            <!--            <div class="me-view-comment">-->
-            <div>
-              <div class="me-view-comment-write" style="margin-bottom: 20px;">
-                <el-row :gutter="20">
-                  <el-col :span="20" style="display:flex;align-items:center;">
-                    <el-input
-                      type="textarea"
-                      :autosize="{ minRows: 2}"
-                      placeholder="你的评论..."
-                      class="me-view-comment-text"
-                      v-model="comment.content"
-                      resize="none"
-                      style="width:90%;margin-right:16px"
-                    ></el-input>
-                    <el-button type="primary" size="30" style="" @click="publishComment()">发表评论
-                    </el-button>
-                    <!--                    <Tinymce :height="200" v-model="comment.content" />-->
-                  </el-col>
-                </el-row>
-              </div>
+  <el-container class="container">
+    <el-header class="mt10">
+      <el-form>
+        <el-form-item>
+          <el-input placeholder="请输入内容" class="input-with-select" style="width: 500px">
+            <el-button @click.native="gotoPage(1)" slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+          <el-button style="margin-left:390px;" type="primary">
+            <i class="el-icon-edit"></i>
+            发布文章
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-header>
+    <el-container>
+<!--      <el-empty description="还没有内容，赶紧去“等待回答”贡献第一条内容吧～"></el-empty>-->
+      <!--        <el-main>
+                <div class="me-view-card">
+                  &lt;!&ndash;            <div class="me-view-comment">&ndash;&gt;
+                  <div>
+                    <div class="me-view-comment-write" style="margin-bottom: 20px;">
+                      <el-row :gutter="20">
+                        <el-col :span="20" style="display:flex;align-items:center;">
+                                              <el-input
+                                                type="textarea"
+                                                :autosize="{ minRows: 2}"
+                                                placeholder="你的评论..."
+                                                class="me-view-comment-text"
+                                                v-model="comment.content"
+                                                resize="none"
+                                                style="width:90%;margin-right:16px"
+                                              ></el-input>
+                          <el-button type="primary" size="30" style="" @click="publishComment()">发表评论
+                          </el-button>
+      &lt;!&ndash;                    <emoji style="width: 700px;margin-top: 300px"></emoji>&ndash;&gt;
+                        </el-col>
+                      </el-row>
+                    </div>
 
-              <div class="me-view-comment-title">
-                <span>{{ commentCounts }} 条评论</span>
-              </div>
+                    <div class="me-view-comment-title">
+                      <span>共有 {{ commentCounts }} 条评论</span>
+                    </div>
 
-              <commment-item
-                v-for="(c,index) in comments"
-                :comment="c"
-                :articleId="article.id"
-                :index="index"
-                :rootCommentCounts="comments.length"
-                @getArticle="getArticle"
-                :key="c.id"
-              ></commment-item>
-            </div>
-          </div>
-        </el-main>
-      </el-container>
-    </section>
-  </div>
+                    <commment-item
+                      v-for="(c,index) in comments"
+                      :comment="c"
+                      :articleId="article.id"
+                      :index="index"
+                      :rootCommentCounts="comments.length"
+                      @getArticle="getArticle"
+                      :key="c.id"
+                    ></commment-item>
+                  </div>
+                </div>
+              </el-main>-->
+    </el-container>
+  </el-container>
 </template>
 
 <script>
@@ -52,7 +64,8 @@ import blogApi from "@/api/blog";
 import commentApi from "@/api/comment";
 import cookie from "js-cookie";
 import default_avatar from "@/assets/img/tipQe.png";
-// import Tinymce from '@/components/Tinymce';
+import emoji from "@/components/emoji"
+
 
 export default {
   name: "forum",
@@ -63,7 +76,7 @@ export default {
     $route: "getArticle"
   },
   components: {
-    CommmentItem
+    CommmentItem, emoji
   },
   data() {
     return {

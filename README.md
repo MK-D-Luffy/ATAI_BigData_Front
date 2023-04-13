@@ -1,8 +1,26 @@
 ## NuxtJS 项目部署
 
-- 先对 nuxt 项目进行npm run build，对.nuxt、static、package.json、nuxt.config.js 文件进行拷贝至部署环境。 
-  
 
+
+
+
+netstat -ano | findstr 8001
+taskkill -pid  8001 -f
+
+
+
+
+
+
+
+
+
+
+
+
+
+- 先对 nuxt 项目进行npm run build，对.nuxt、static、package.json、nuxt.config.js 文件进行拷贝至部署环境。
+- 
 - 在所在目录中执行 npm install 安装前端所需依赖，npm start运行。
 
 
@@ -23,3 +41,21 @@
 
 4.在plugins中添加router.js，在nuxt.config.js中配置，实现路由拦截。
 
+### 版本号 2.3
+1.修改了cookie的绑定域，使其能够在公网上被绑定访问。
+
+2.修复了验证码请求重复提交的问题。
+
+3.在competition.js中添加了运行代码runCode接口。
+
+4.个人中心的个人信息页面添加并实现了修改绑定手机号和邮箱的按钮。
+
+5.获取验证码按钮功能改进。
+
+6.验证码请求统一放到后端处理。
+
+7.修改了验证码的校验次数(5次)。
+
+8.修改密码页面增加了邮箱验证和手机号验证两种方式，并增加了确认密码。
+
+9.scrollPage组件高度设置为0

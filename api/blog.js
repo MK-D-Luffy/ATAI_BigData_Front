@@ -3,7 +3,7 @@ export default {
     //分页查询文章的方法
     pageArticleCondition(page,limit,articleQuery) {
       return request({
-        url: `/eduservice/atai-article/pageArticleCondition/${page}/${limit}`,
+        url: `/ataiservice/atai-article/pageArticleCondition/${page}/${limit}`,
         method: 'post',
         data: articleQuery
       })
@@ -12,7 +12,7 @@ export default {
     //文章id查询这篇文章+文章体
     viewArticle(id) {
       return request({
-        url: `/eduservice/atai-article/getArticleById/${id}`,
+        url: `/ataiservice/atai-article/getArticleById/${id}`,
         method: 'get'
       })
     },
@@ -20,7 +20,7 @@ export default {
     //查询文章所有分类
     getCategorys(){
       return request({
-        url: `/eduservice/atai-category/findAll`,
+        url: `/ataiservice/atai-category/findAll`,
         method: 'get'
       })
     },
@@ -28,13 +28,13 @@ export default {
     //发布文章
     publishArticle(articlePublish){
       return request({
-      url: `/eduservice/atai-article/addArticle`,
+      url: `/ataiservice/atai-article/addArticle`,
       method: 'post',
       data: articlePublish
       })
     },
 
- 
+
     //上传图片
     upload(formdata){
       return request({
@@ -42,20 +42,20 @@ export default {
         url: '/eduoss/fileoss',
         method: 'post',
         data: formdata
-      })  
+      })
     },
     //删除文章
     removeMyArticle(id){
       return request({
-        url: `/eduservice/atai-article/removeArticle/${id}`,
+        url: `/ataiservice/atai-article/removeArticle/${id}`,
         method: 'get',
-      }) 
+      })
     },
     //查询当前用户的比赛列表
     getMyArticleList(page,limit){
     return request({
-      url: `/eduservice/atai-article/getMyArticleList/${page}/${limit}`,
+      url: `/ataiservice/atai-article/getMyArticleList/${page}/${limit}`,
       method: 'get',
-    }) 
+    })
   }
 }
