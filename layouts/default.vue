@@ -20,13 +20,13 @@
               <router-link to="/course" tag="li" active-class="current">
                 <a>学习</a>
               </router-link>
-              <router-link to="/blog" tag="li" active-class="current">
-                <a>论坛</a>
-              </router-link>
+              <!--              <router-link to="/blog" tag="li" active-class="current">-->
+              <!--                <a>论坛</a>-->
+              <!--              </router-link>-->
               <router-link to="/dataset" tag="li" active-class="current">
                 <a>数据集</a>
               </router-link>
-              <router-link to="/host" tag="li" active-class="current">
+              <router-link v-if="loginFlag" to="/host" tag="li" active-class="current">
                 <a>我要办赛</a>
               </router-link>
             </ul>
@@ -54,7 +54,7 @@
               <li v-if="loginInfo.id" id="is-login-two" class="h-r-user">
                 <a href="/ucenter/info/basic" title>
                   <el-avatar style="background-color:#fff;"
-                             :size="size"
+                             size="small"
                              :src=loginInfo.avatar>
                   </el-avatar>
                   <span id="userName" class="vam disIb" style="padding:0 2px">{{ loginInfo.nickname }}</span>
@@ -64,20 +64,6 @@
 
               <!-- /未登录显示第1 li；登录后显示第2，3 li -->
             </ul>
-<!--            <aside class="h-r-search">-->
-<!--              <form action="#" method="post">-->
-<!--                <label class="h-r-s-box" style="margin-right:30px">-->
-<!--                  <input style="width:110px;" type="text" placeholder="输入比赛" v-model="keyword"-->
-<!--                         name="queryCourse.courseName" value>-->
-<!--                  &lt;!&ndash;                  <router-link :to="{path:'/competition',query: {keyword: this.keyword}}">&ndash;&gt;-->
-<!--                  &lt;!&ndash;                 &ndash;&gt;-->
-<!--                  &lt;!&ndash;                  </router-link>&ndash;&gt;-->
-<!--                  <button type="submit" class="s-btn" @click="search()">-->
-<!--                    <em class="icon18">&nbsp;</em>-->
-<!--                  </button>-->
-<!--                </label>-->
-<!--              </form>-->
-<!--            </aside>-->
           </div>
           <aside class="mw-nav-btn">
             <div class="mw-nav-icon"></div>
@@ -120,7 +106,7 @@
                   <span>Email：1905470291@qq.com</span>
                 </section>
                 <section class="b-f-link mt10">
-                  <span>©2021版权均归ATAI所有 </span>
+                  <span>©2023版权均归ATAI所有 </span>
                 </section>
               </section>
             </section>
@@ -174,9 +160,8 @@ export default {
         avatar: '',
         nickname: '',
       },
-      keyword: '',
-      size: "small",
       isRouterAlive: true,
+      loginFlag: false
     }
   },
   watch: {
@@ -185,6 +170,10 @@ export default {
     }
   },
   created() {
+    const loginCookie = cookie.get("ATAI_BigData_ucenter")
+    if (loginCookie !== undefined && loginCookie !== '') {
+      this.loginFlag = true;
+    }
     //获取路径里面token值
     this.token = this.$route.query.token
     if (this.token) {//判断路径是否有token值
@@ -213,12 +202,6 @@ export default {
       if (userStr) {
         this.loginInfo = JSON.parse(userStr)
       }
-    },
-
-    //搜索
-    search() {
-      // alert(this.keyword)
-      this.$router.push({path: '/competition', query: {keyword: this.keyword}})
     },
 
     //退出  cookie清空

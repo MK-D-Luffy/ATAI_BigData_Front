@@ -51,7 +51,7 @@
                       <el-col :span="4" justify="start">
                         <el-image
                           style="width: 180px; height: 120px;margin-right:20px;border-radius:10px"
-                          :src="course.image"
+                          :src="course.cover"
                           fit="fill"
                         ></el-image>
                       </el-col>

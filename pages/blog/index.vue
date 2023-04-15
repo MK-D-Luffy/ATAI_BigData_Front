@@ -3,35 +3,35 @@
     <el-container class="container mt20">
 
       <el-main class="bg-ff bradius pt20 pl20">
-        <!--        <article-scroll-page></article-scroll-page>-->
-        <el-form>
-          <el-form-item>
-            <el-input placeholder="请输入内容" class="input-with-select" style="width: 500px">
-              <el-select slot="prepend" placeholder="请选择" style="width: 100px">
-                <el-option label="最新" value="1"></el-option>
-                <el-option label="最热" value="2"></el-option>
-              </el-select>
-              <el-button @click.native="gotoPage(1)" slot="append" icon="el-icon-search"></el-button>
-            </el-input>
-            <el-button style="margin-left:160px;" type="primary">
-              <i class="el-icon-edit"></i>
-              发布文章
-            </el-button>
-          </el-form-item>
-          <el-form-item lable="类别" class="linkStyle2">
-            <el-link @click.native="setCategory()" :underline="false" type="primary">全部</el-link>
-            <el-link @click.native="setCategory('互联网')" :underline="false">文章</el-link>
-            <el-link @click.native="setCategory('金融')" :underline="false">问答</el-link>
-            <el-link @click.native="setCategory('金融')" :underline="false">等待回答</el-link>
-          </el-form-item>
-          <el-form-item lable="技术" class="linkStyle2">
-            <el-link @click.native="setCategory()" :underline="false" type="primary">全部</el-link>
-            <el-link @click.native="setCategory('互联网')" :underline="false">数据挖掘</el-link>
-            <el-link @click.native="setCategory('金融')" :underline="false">自然语言处理</el-link>
-            <el-link @click.native="setCategory('语言学')" :underline="false">计算机视觉</el-link>
-            <el-link @click.native="setCategory('语言学')" :underline="false">AI其他</el-link>
-          </el-form-item>
-        </el-form>
+<!--                <article-scroll-page></article-scroll-page>-->
+<!--        <el-form>-->
+<!--          <el-form-item>-->
+<!--            <el-input placeholder="请输入内容" class="input-with-select" style="width: 500px">-->
+<!--              <el-select slot="prepend" placeholder="请选择" style="width: 100px">-->
+<!--                <el-option label="最新" value="1"></el-option>-->
+<!--                <el-option label="最热" value="2"></el-option>-->
+<!--              </el-select>-->
+<!--              <el-button @click.native="gotoPage(1)" slot="append" icon="el-icon-search"></el-button>-->
+<!--            </el-input>-->
+<!--            <el-button style="margin-left:160px;" type="primary">-->
+<!--              <i class="el-icon-edit"></i>-->
+<!--              发布文章-->
+<!--            </el-button>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item lable="类别" class="linkStyle2">-->
+<!--            <el-link @click.native="setCategory()" :underline="false" type="primary">全部</el-link>-->
+<!--            <el-link @click.native="setCategory('互联网')" :underline="false">文章</el-link>-->
+<!--            <el-link @click.native="setCategory('金融')" :underline="false">问答</el-link>-->
+<!--            <el-link @click.native="setCategory('金融')" :underline="false">等待回答</el-link>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item lable="技术" class="linkStyle2">-->
+<!--            <el-link @click.native="setCategory()" :underline="false" type="primary">全部</el-link>-->
+<!--            <el-link @click.native="setCategory('互联网')" :underline="false">数据挖掘</el-link>-->
+<!--            <el-link @click.native="setCategory('金融')" :underline="false">自然语言处理</el-link>-->
+<!--            <el-link @click.native="setCategory('语言学')" :underline="false">计算机视觉</el-link>-->
+<!--            <el-link @click.native="setCategory('语言学')" :underline="false">AI其他</el-link>-->
+<!--          </el-form-item>-->
+<!--        </el-form>-->
 
 <!--        <ul class="of">-->
 <!--          <li v-for="article in articles" :key="article.id">-->

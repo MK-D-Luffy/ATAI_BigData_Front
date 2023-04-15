@@ -140,7 +140,10 @@ export default {
         if (valid) {
           // 判断修改或添加 dataset 是否有id
           if (!this.dataset.id) {
-            const loginInfo = JSON.parse(cookie.get("ATAI_BigData_ucenter"));
+            const loginCookie = cookie.get("ATAI_BigData_ucenter")
+            if (loginCookie !== undefined && loginCookie !== '') {
+              const loginInfo = JSON.parse(cookie.get("ATAI_BigData_ucenter"));
+            }
             this.dataset.userId = loginInfo.id
             if(this.dataset.userId!==undefined){
               this.addDataset()

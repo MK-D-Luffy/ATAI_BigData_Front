@@ -2,18 +2,21 @@ import request from '@/utils/request'
 
 export default {
 
-  //查询前五条公告
-  getLatestNotice(type) {
+  getLargeCompetition(){
     return request({
-      url: `/ataiservice/atai-notice/getLatestNotice?type=` + type,
+      url: `/ataiservice/atai-competition/getLargeCompetition`,
       method: 'get',
     })
   },
-
-  //查询4热门老师
-  getHotTeacher() {
+  getHotCourses() {
     return request({
-      url: `/ataiservice/indexfront/indexHotTeacher`,
+      url: `/ataiservice/atai-course/getHotCourses`,
+      method: 'get',
+    })
+  },
+  getHotDatasets() {
+    return request({
+      url: `/ataiservice/atai-dataset/getHotDatasets`,
       method: 'get'
     })
   }

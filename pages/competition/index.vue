@@ -83,8 +83,9 @@
                       <el-button size="mini" style="pointer-events: none;zoom:80%"
                                  class="greenBtn"
                                  :class="[{redBtn:competition.tech==='数据挖掘'},
-                                          {redBtn: competition.tech==='官方赛'},
-                                          {purpleBtn:competition.tech==='训练赛'},
+                                          {greenBtn: competition.tech==='自然语言处理'},
+                                          {purpleBtn:competition.tech==='计算机视觉'},
+                                          {purpleBtn:competition.tech==='AI其他'},
                                         ]">
                         {{ competition.tech }}
                       </el-button>
@@ -166,7 +167,6 @@
           </div>
         </div>
         <!-- 公共分页 结束 -->
-        <!-- 公共分页 结束 -->
       </el-main>
       <!-- /比赛列表 结束 -->
       <el-aside width="260px">
@@ -174,31 +174,23 @@
           <div slot="header" class="clearfix">
             <i class="el-icon-help"></i>
             <span>大型专题赛区</span>
-            <el-button style="float: right; padding: 3px 0" type="text">更多></el-button>
           </div>
-          <div v-for="o in 4" :key="o" class="text item">
-            {{ '列表内容 ' + o }}
-          </div>
-        </el-card>
-
-        <el-card shadow="never">
-          <div slot="header" class="clearfix">
-            <i class="el-icon-data-analysis"></i>
-            <span>热门课程</span>
-            <el-button style="float: right; padding: 3px 0" type="text">更多></el-button>
-          </div>
-          <div v-for="o in 4" :key="o" class="text item">
-            {{ '列表内容 ' + o }}
+          <div v-for="competition in large" :key="competition.id" class="text item"
+               style="border-bottom: 2px dashed rgb(235, 238, 245)">
+            <a :href="'/competition/'+competition.id">
+              <el-image style="height:100px" :src="competition.cover"></el-image>
+              {{ competition.name }}
+            </a>
           </div>
         </el-card>
       </el-aside>
     </el-container>
-
   </div>
 </template>
 <script>
 //引入调用competition.js文件
 import competitionApi from '@/api/competition'
+import indexApi from '@/api/index'
 import cookie from "js-cookie";
 
 export default {
@@ -206,10 +198,9 @@ export default {
   data() {
     return {
       data: [], //查询之后接口返回集合
+      large: [],
       page: 1, //当前页
       limit: 10, //每页记录数
-      oneIndex: -1,
-      choose: '最新',
       compObj: {
         name: '',
         level: '',
@@ -217,7 +208,6 @@ export default {
         status: 0,
         sort: '最热'
       }, // 查询表单对象
-      fullscreenLoading: true,
       greenBtn: 'greenBtn',
       redBtn: 'redBtn',
       purpleBtn: 'purpleBtn'
@@ -228,14 +218,9 @@ export default {
     // debugger
     this.compObj.name = this.$route.query.keyword
     this.getCompetitionList()
+    this.getLargeCompetition()
   },
   methods: {
-    //判断是否已经截止,已经截止返回true
-    judgeEnd(deadline) {
-      let time = new Date(deadline)
-      let now = new Date();
-      return time < now
-    },
     //获取比赛列表
     getCompetitionList(page = 1) { //比赛列表的方法
       // debugger
@@ -250,32 +235,22 @@ export default {
           console.log(error)
         })
     },
-    //分页切换的方法
-    //参数是页码数
-    gotoPage(page) {
-      competitionApi.getCompetitionPageList(page, this.limit, this.compObj)
-        .then(response => {
-          this.data = response.data.data
+    getLargeCompetition() { //比赛列表的方法
+      indexApi.getLargeCompetition()
+        .then(response => { //请求成功
+          console.log(response.data)
+          this.large = response.data.data.large
+        })
+        .catch(error => { //请求失败
+          console.log(error)
         })
     },
-
-    searchOne(subjectParentId, index) {
-      // debugger
-      //把传递index值赋值给oneIndex,为了active样式生效  页面样式
-      if (this.oneIndex === index) {
-        this.oneIndex = -1
-      } else {
-        this.oneIndex = index
-      }
-      if (this.compObj.level === subjectParentId) {
-        this.compObj.level = ''
-      } else {
-        this.compObj.level = subjectParentId
-      }
-      //点击某个一级分类进行条件查询
-      this.gotoPage(1)
+    //判断是否已经截止,已经截止返回true
+    judgeEnd(deadline) {
+      let time = new Date(deadline)
+      let now = new Date();
+      return time < now
     },
-
     setStatus(status) {
       this.compObj.status = status
       this.gotoPage(1)
@@ -293,41 +268,12 @@ export default {
       this.compObj.active = !this.compObj.active
       this.gotoPage(1);
     },
-
-    //6 根据参赛人数排序
-    searchParticipants() {
-      //设置对应变量值，为了样式生效
-      if (this.compObj.hotSort === "1") {
-        this.compObj.hotSort = "0"
-      } else {
-        this.compObj.hotSort = "1"
-      }
-
-      //把值赋值到compObj
-      this.compObj.gmtCreateSort = "";
-      this.compObj.priceSort = "";
-
-      //调用方法查询
-      this.gotoPage(1)
+    gotoPage(page) {
+      competitionApi.getCompetitionPageList(page, this.limit, this.compObj)
+        .then(response => {
+          this.data = response.data.data
+        })
     },
-
-    //7 最新排序
-    searchGmtCreate() {
-      //设置对应变量值，为了样式生效
-      if (this.compObj.gmtCreateSort === "1") {
-        this.compObj.gmtCreateSort = "0"
-      } else {
-        this.compObj.gmtCreateSort = "1"
-      }
-
-      //把值赋值到compObj
-      this.compObj.hotSort = ""
-      this.compObj.priceSort = "";
-
-      //调用方法查询
-      this.gotoPage(1)
-    },
-
     view(id) {
       if (id != null) {
         this.$router.push({path: `/competition/${id}`});
@@ -335,9 +281,7 @@ export default {
         this.reload();
       }
     }
-
   }
-
 };
 </script>
 <style scoped>

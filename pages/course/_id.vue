@@ -153,14 +153,19 @@ export default {
     };
   },
   created() {
-    const loginInfo = JSON.parse(cookie.get("ATAI_BigData_ucenter"));
-    this.userCourse.userId = loginInfo.id
+    const loginCookie = cookie.get("ATAI_BigData_ucenter")
+    if (loginCookie !== undefined && loginCookie !== '') {
+      const loginInfo = JSON.parse(loginCookie);
+      this.userCourse.userId = loginInfo.id
+    }
     this.userCourse.courseId = this.$route.params.id
 
     this.getCourse(this.userCourse.courseId);
     this.getCourseClass(this.userCourse.courseId)
     //查询用户在这个比赛中的信息
-    this.getCourseUser(this.userCourse.userId, this.userCourse.courseId);
+    if (this.userCourse.userId !== '') {
+      this.getCourseUser(this.userCourse.userId, this.userCourse.courseId);
+    }
   },
   methods: {
     getCourse(courseId) {
@@ -212,24 +217,32 @@ export default {
         });
     },
     attend() {
-      this.userCourse.id = ''
-      this.userCourse.learned = ''
-      for (let i = 0; i < this.courseClass.length; i++) {
-        this.userCourse.learned += '0'
+      if (this.userCourse.userId === '') {
+        this.$message({
+          type: "info",
+          message: " 请先登录再进行下一步操作"
+        });
+        this.$router.push({path: `/login`});
+      } else {
+        this.userCourse.id = ''
+        this.userCourse.learned = ''
+        for (let i = 0; i < this.courseClass.length; i++) {
+          this.userCourse.learned += '0'
+        }
+        courseApi.addCourseUser(this.userCourse).then(response => {
+          this.baomingflag = true
+          this.userCourse.id = response.data.data.userCourse.id
+          this.$message({
+            type: "success",
+            message: "参加课程成功"
+          });
+        }).catch(error => {
+          this.$message({
+            type: "error",
+            message: "请求失败"
+          });
+        })
       }
-      courseApi.addCourseUser(this.userCourse).then(response => {
-        this.baomingflag = true
-        this.userCourse.id = response.data.data.userCourse.id
-        this.$message({
-          type: "success",
-          message: "参加课程成功"
-        });
-      }).catch(error => {
-        this.$message({
-          type: "error",
-          message: "请求失败"
-        });
-      })
     },
     quit() {
       this.$confirm('是否确认退出?(退出课程会导致学习进度丢失)', '注意', {

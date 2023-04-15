@@ -19,7 +19,7 @@
     <el-main v-if="submitIndex==='1'">
       <el-row>
         <el-col :span="24">
-          <el-tag type="warning">依据竞赛规则每队每天可提交 3 次，队伍今日还可提交 2 次，您本人今日还可提交 2 次</el-tag>
+          <el-tag type="warning">依据竞赛规则每队总共可提交 5 次，队伍今日还可提交 {{ submitCounts }} 次，您本人今日还可提交 {{ submitCounts }} 次</el-tag>
         </el-col>
         <el-col class="mt20 fsize14" :span="24">
           <span>结果文件</span>
@@ -37,9 +37,9 @@
                 :on-error="fileUploadError"
                 :disabled="importBtnDisabled||submitCounts===0"
                 :limit="1"
-                :action="BASE_API+'/atitcompetition/atai-user-competition/saveResult/'+competitionId+'/'+userId"
+                :action="BASE_API+'/ataiservice/atai-competition/submit/'+competitionId+'/'+teamId+'/'+userId"
                 name="file"
-                accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain"
+                accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain,.py"
               >
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -72,7 +72,7 @@
           <el-card v-for="record in recordsByUser" :key="record.id" class="mb20">
             <el-row>
               <el-col class="pb10 fsize16 fw6" style="border-bottom: 1px dashed #e4e7ed;" :span=24>
-                {{ record.file }}
+                {{ record.filename }}
               </el-col>
             </el-row>
             <el-row class="mt10 mb15">
@@ -86,7 +86,7 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-tag style="width:430px" type="info">备注:{{ record.comment }}</el-tag>
+              <el-tag style="width:430px" type="info">备注:无</el-tag>
             </el-row>
           </el-card>
         </el-tab-pane>
@@ -95,7 +95,7 @@
           <el-card v-for="record in recordsByTeam" :key="record.id" class="mb20">
             <el-row>
               <el-col class="pb10 fsize16 fw6" style="border-bottom: 1px dashed #e4e7ed;" :span=19>
-                {{ record.file }}
+                {{ record.filename }}
               </el-col>
               <el-col class="fsize12 fw4" style="color: #909399;" :span="5">
                 上传用户：SADAddddddddd
@@ -112,7 +112,7 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-tag style="width:430px" type="info">备注:{{ record.comment }}</el-tag>
+              <el-tag style="width:430px" type="info">备注:无</el-tag>
             </el-row>
           </el-card>
         </el-tab-pane>
@@ -154,56 +154,15 @@
 
       </div>
     </el-main>
-
-    <!--    <section class="container" style="width: 88%;margin-top:15px;">-->
-    <!--      <el-form v-if="!endFlag">-->
-    <!--        &lt;!&ndash; 提交到oss，后端 &ndash;&gt;-->
-    <!--        <el-form-item>-->
-    <!--          &lt;!&ndash; myUpload唯一标识  &ndash;&gt;-->
-    <!--          <el-upload-->
-    <!--            :class="{ notAllowed: submitCounts===0}"-->
-    <!--            ref="myUpload"-->
-    <!--            :auto-upload="false"-->
-    <!--            :on-success="fileUploadSuccess"-->
-    <!--            :on-error="fileUploadError"-->
-    <!--            :disabled="importBtnDisabled||submitCounts===0"-->
-    <!--            :limit="1"-->
-    <!--            :action="BASE_API+'/atitcompetition/atai-user-competition/saveResult/'+competitionId+'/'+userId"-->
-    <!--            name="file"-->
-    <!--            accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain"-->
-    <!--          >-->
-    <!--            &lt;!&ndash; 设置上传格式 微软excel &ndash;&gt;-->
-    <!--            <el-button :disabled="submitCounts===0" :class="{ notAllowed: submitCounts===0 }"-->
-    <!--                       style="background-color:#00C1DE;color:#fff;"-->
-    <!--                       slot="trigger" size="small">选取文件-->
-    <!--            </el-button>-->
-    <!--            <el-button-->
-    <!--              :disabled="submitCounts===0"-->
-    <!--              :class="{ notAllowed: submitCounts===0 }"-->
-    <!--              :loading="loading"-->
-    <!--              style="margin-left: 10px;"-->
-    <!--              size="small"-->
-    <!--              type="success"-->
-
-    <!--              @click="submitUpload"-->
-    <!--            >{{ fileUploadBtnText }}-->
-    <!--            </el-button>-->
-    <!--          </el-upload>-->
-    <!--        </el-form-item>-->
-    <!--      </el-form>-->
-    <!--    </section>-->
-
   </el-container>
 </template>
 
 <script>
 //引入调用competition.js文件
 import competitionApi from "@/api/competition";
-//引入调用js-cookie
-import cookie from 'js-cookie'
 
 export default {
-  name: "submitRes",
+  name: "submit",
   inject: ['reload'],
   props: {
     endFlag: Boolean,
@@ -217,7 +176,7 @@ export default {
       fileUploadBtnText: "上传到服务器", // 按钮文字
       importBtnDisabled: false, // 按钮是否禁用,
       loading: false,
-      submitCounts: 3,
+      submitCounts: 0,
       activeIndex: "1",
       submitIndex: "1",
       submit2Index: "1",
@@ -226,8 +185,9 @@ export default {
       rankList: []
     };
   },
-  created() {
+  mounted() {
     // this.submitCounts = this.userCompetition.submitCounts;
+    this.getCompetitionTeam()
     this.getRecordsByUserId()
     this.getRecordsByTeamId()
     this.getRankList();
@@ -281,6 +241,12 @@ export default {
         type: "error",
         message: "导入文件失败"
       });
+    },
+    getCompetitionTeam() {
+      competitionApi.getCompetitionTeam(this.teamId)
+        .then(response => {
+          this.submitCounts = response.data.data.data.submitCounts
+        })
     },
     getRecordsByUserId() {
       competitionApi.getRecordsByUserId(this.competitionId, this.userId)

@@ -230,6 +230,7 @@ export default {
       blogApi
         .viewArticle(that.$route.params.id)
         .then(response => {
+          console.log(response.data)
           Object.assign(that.article, response.data.data.data);
           // that.article = response.data.data
           that.article.editor.value = response.data.data.data.content;

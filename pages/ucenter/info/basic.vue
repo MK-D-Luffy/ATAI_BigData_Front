@@ -39,18 +39,6 @@
             <el-input-number style="width:180px" v-model="memberInfo.age" :min="0" controls-position="right"/>
           </el-form-item>
 
-          <el-form-item label="学历">
-            <el-select style="width:180px" v-model="memberInfo.education" clearable placeholder="请选择">
-              <el-option
-                v-for="item in educationOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-
           <!-- 头像 -->
           <el-form-item label="头像">
             <el-upload
@@ -59,7 +47,7 @@
               :on-error="handleAvatarError"
               :before-upload="beforeAvatarUpload"
               class="avatar-uploader"
-              action=" https://baiyunrain.mynatapp.cc/eduoss/fileoss">
+              action=" http://localhost:8666/ataioss/fileoss/upload">
               <img v-if="memberInfo.avatar" :src="memberInfo.avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"/>
               <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过1MB</div>
@@ -172,14 +160,12 @@ export default {
         id: '',
         age: '',
         avatar: '',
-        education: '',
         mobile: '',
         email: '',
         nickname: '',
         sex: '',
         sign: '',
       },
-      educationOptions: [],
       saveBtnDisabled: false, //保存按钮是否禁用
       mobileDialogVisible: false,
       emailDialogVisible: false,
@@ -210,35 +196,10 @@ export default {
     // if (this.token) {//判断路径是否有token值
     //   this.wxLogin()
     // }
-    this.updateEducationOption();
     this.showInfoFromCookie()
   },
 
   methods: {
-    //每年更新
-    updateEducationOption() {
-      let myDate = new Date();
-      let year = Number(myDate.getFullYear());
-      let month = Number(myDate.getMonth());
-      let options = []
-      if (month >= 7) {
-        for (let i = year - 3; i <= year - 1; i++) {
-          let obj1 = {};
-          let obj2 = {};
-          let str1 = i + "级本科生"
-          let str2 = i + "级研究生"
-          obj1["label"] = str1
-          obj1["value"] = str1
-          options.push(obj1)
-          obj2["label"] = str2
-          obj2["value"] = str2
-          options.push(obj2)
-        }
-        console.log(options)
-      }
-      this.educationOptions = options
-
-    },
     //安全性验证
     validateSecurity() {
       ucenterApi.validateSecurity(this.validateParams, this.memberInfo.id).then(response => {
@@ -370,7 +331,6 @@ export default {
     },
 
     saveMsg() {
-      // this.memberInfo.education = this.memberInfo.education[1] + this.memberInfo.education[0]
       console.log(this.memberInfo)
       ucenterApi.updateMemberInfo(this.memberInfo)
         .then(response => { //修改成功

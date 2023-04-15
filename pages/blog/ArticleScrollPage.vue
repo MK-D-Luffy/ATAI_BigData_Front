@@ -2,7 +2,7 @@
   <!-- <scroll-page :loading="loading" :offset="offset" :no-data="noData" v-on:load="load"> -->
   <scroll-page>
     <el-card :body-style="{ padding: '16px 18px 2px' }">
-      <el-form style="margin-top: 6px"  :inline="true" class="demo-form-inline" size="mini">
+      <el-form style="margin-top: 6px" :inline="true" class="demo-form-inline" size="mini">
         <el-form-item>
           <el-date-picker style="width:175px" v-model="compObj.begin" type="datetime" placeholder="选择开始时间"
                           value-format="yyyy-MM-dd HH:mm:ss"
@@ -26,7 +26,7 @@
     <article-item v-for="a in articles" :key="a.id" v-bind="a"></article-item>
     <!-- 公共分页 开始 -->
     <div>
-      <div class="paging" style="padding: 36px 0 32px">
+      <div class="paging">
         <!-- undisable这个class是否存在，取决于数据属性hasPrevious -->
         <a :class="{undisable: !data.hasPrevious}" href="#" title="首页" @click.prevent="gotoPage(1)">首页</a>
 
@@ -65,94 +65,47 @@ export default {
       subjectNestedList: [], // 分类列表
       oneIndex: -1,
       compObj: {
-        begin:'',
-        end:'',
-        title:'',
+        begin: '',
+        end: '',
+        title: '',
       }, // 查询表单对象
       loading: false,
       noData: false,
-      // innerPage: {
-      //   pageSize: 5,
-      //   pageNumber: 1,
-      //   name: 'a.createDate',
-      //   sort: 'desc'
-      // },
       articles: []
     }
   },
-
-  // props: {
-  // offset: {//default父组件没传值时候的默认值
-  //   type: Number,
-  //   default: 100
-  // },
-  // page: {
-  //   type: Object,
-  //   default() {
-  //     return {}
-  //   }
-  // },
-  // query: {
-  //   type: Object,
-  //   default() {
-  //     return {}
-  //   }
-  // }
-  // },
-  // watch: {
-  //   'query': {
-  //     handler() {
-  //       this.noData = false
-  //       this.articles = []
-  //       this.innerPage.pageNumber = 1
-  //       this.pageArticleCondition()
-  //     },
-  //     deep: true
-  //   },
-  //   'page': {
-  //     handler() {
-  //       this.noData = false
-  //       this.articles = []
-  //       this.innerPage = this.page
-  //       this.pageArticleCondition()
-  //     },
-  //     deep: true
-  //   }
-  // },
   created() {
     // this.pageArticleCondition(this.page1,this.limit,this.compObj)
-    // this.gotoPage(1)
-  },
-  mounted() {
     this.gotoPage(1)
   },
+  // mounted() {
+  //   this.gotoPage(1)
+  // },
   methods: {
     gotoPage(page) {
       // console.log(this.articles)
       // debugger
       blogApi.pageArticleCondition(page, this.limit, this.compObj)
-          .then(response => {
-            // debugger
-            this.data = response.data.data
-            let newArticles = response.data.data.records
-            this.articles = []
-            if (newArticles && newArticles.length > 0) {
-              // this.innerPage.pageNumber += 1
-              this.articles = this.articles.concat(newArticles)
-              for (let i = 0; i < newArticles.length; i++) {
-                this.articles[i]["tags"] = newArticles[i].tag.split(",")
-
-              }
-              ;
-            } else {
-              this.noData = true
+        .then(response => {
+          console.log(response.data)
+          this.data = response.data.data
+          let newArticles = response.data.data.records
+          this.articles = []
+          if (newArticles && newArticles.length > 0) {
+            // this.innerPage.pageNumber += 1
+            this.articles = this.articles.concat(newArticles)
+            for (let i = 0; i < newArticles.length; i++) {
+              this.articles[i]["tags"] = newArticles[i].tag.split(",")
             }
-          })
-          .catch(error => {
-            if (error !== 'error') {
-              this.$message({type: 'error', message: '文章加载失败!', showClose: true})
-            }
-          }).finally(() => {
+          } else {
+            this.noData = true
+          }
+        })
+        .catch(error => {
+          if (error !== 'error') {
+            this.$message({type: 'error', message: '文章加载失败!', showClose: true})
+          }
+        }).finally(() => {
         this.loading = false
       })
     },
@@ -162,27 +115,26 @@ export default {
       this.compObj.begin = begin
       this.compObj.end = end
       blogApi.pageArticleCondition(1, this.limit, this.compObj)
-          .then(response => {
-            this.data = response.data.data
-            let newArticles = response.data.data.records
-            this.articles = []
-            if (newArticles && newArticles.length > 0) {
-              // this.innerPage.pageNumber += 1
-              this.articles = this.articles.concat(newArticles)
-              for (let i = 0; i < newArticles.length; i++) {
-                this.articles[i]["tags"] = newArticles[i].tag.split(",")
-
-              }
-              ;
-            } else {
-              this.noData = true
+        .then(response => {
+          this.data = response.data.data
+          let newArticles = response.data.data.records
+          this.articles = []
+          if (newArticles && newArticles.length > 0) {
+            // this.innerPage.pageNumber += 1
+            this.articles = this.articles.concat(newArticles)
+            for (let i = 0; i < newArticles.length; i++) {
+              this.articles[i]["tags"] = newArticles[i].tag.split(",")
             }
-          })
-          .catch(error => {
-            if (error !== 'error') {
-              this.$message({type: 'error', message: '文章加载失败!', showClose: true})
-            }
-          }).finally(() => {
+            ;
+          } else {
+            this.noData = true
+          }
+        })
+        .catch(error => {
+          if (error !== 'error') {
+            this.$message({type: 'error', message: '文章加载失败!', showClose: true})
+          }
+        }).finally(() => {
         this.loading = false
       })
     },
@@ -202,11 +154,9 @@ export default {
           path: '/login'
         })
       }
-
     },
     load() {
       //   //下拉执行函数
-
       //   // this.pageArticleCondition()
     },
     // view(id) {
@@ -218,7 +168,6 @@ export default {
     'article-item': ArticleItem,
     'scroll-page': ScrollPage
   }
-
 }
 </script>
 
@@ -229,6 +178,5 @@ export default {
 
 .el-card:not(:first-child) {
   margin-top: 10px;
-
 }
 </style>

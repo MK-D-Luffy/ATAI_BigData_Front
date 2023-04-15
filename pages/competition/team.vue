@@ -201,7 +201,7 @@ export default {
       limit: 5
     }
   },
-  created() {
+  mounted() {
     this.getCompetitionTeam()
     this.getTeamUsers();
     this.getTeamList()

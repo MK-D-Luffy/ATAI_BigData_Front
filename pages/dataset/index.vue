@@ -67,7 +67,7 @@
           <article class="i-competition-list" v-if="data.total>0">
             <ul class="of">
               <li v-for="dataset in data.items" :key="dataset.id">
-                <router-link to="/dataset/1">
+                <router-link :to="'/dataset/'+dataset.id">
                   <section class="i-dataset-wrap">
                     <el-row :gutter="22">
                       <el-col :span="4" justify="start">

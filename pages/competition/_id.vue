@@ -23,34 +23,34 @@
           </el-col>
         </el-row>
 
-        <div class="mt15 i-q-txt" style="min-height:61px;text-align:left">
+        <div class="mt15 i-q-txt fsize18" style="min-height:61px;text-align:left">
           <el-row :gutter="24">
             <el-col :span="8" justify="start">
-              <div class="mt10 hLh30 txtOf tac f24">{{ this.competition.name }}</div>
+              <div class="mt10 hLh30 txtOf tac">{{ this.competition.name }}</div>
             </el-col>
             <el-col :span="3" justify="start">
-              <div class="mt10 hLh30 txtOf tac f24">￥{{ this.competition.money }}</div>
+              <div class="mt10 hLh30 txtOf tac">￥{{ this.competition.money }}</div>
             </el-col>
             <el-col :span="2" justify="start">
-              <div class="mt10 hLh30 txtOf tac f24">{{ this.competition.participants }}</div>
+              <div class="mt10 hLh30 txtOf tac">{{ this.competition.participants }}</div>
             </el-col>
             <el-col :span="4" justify="start">
-              <div class="mt10 hLh30 txtOf tac f24">{{ this.competition.deadline.substring(0, 10) }}</div>
+              <div class="mt10 hLh30 txtOf tac">{{ this.competition.deadline.substring(0, 10) }}</div>
             </el-col>
             <el-col :span="3" justify="start">
-              <div class="mt10 hLh30 txtOf tac f24" style="color:#fa8c16"
+              <div class="mt10 hLh30 txtOf tac" style="color:#fa8c16"
                    v-if="!endFlag">进行中
               </div>
-              <div class="mt10 hLh30 txtOf tac f24" style="color:#b2b2b2"
+              <div class="mt10 hLh30 txtOf tac" style="color:#b2b2b2"
                    v-else>已结束
               </div>
             </el-col>
             <el-col :span="3" justify="start">
-              <div v-if="endFlag" class="mt10 hLh30 txtOf tac f24" style="color:#b2b2b2">已结束</div>
+              <div v-if="endFlag" class="mt10 hLh30 txtOf tac" style="color:#b2b2b2">已结束</div>
               <div v-else>
                 <el-button text-align="center" v-if="!attendFlag" @click="registration()" type="primary">报名比赛
                 </el-button>
-                <div class="mt10 hLh30 txtOf tac f24" v-else style="color:#67C23A">已报名</div>
+                <div class="mt10 hLh30 txtOf tac" v-else style="color:#67C23A">已报名</div>
               </div>
             </el-col>
           </el-row>
@@ -79,7 +79,7 @@
           <questions :attendFlag="attendFlag" :competition="competition"></questions>
         </el-tab-pane>
         <el-tab-pane name="tab2" v-if="attendFlag">
-          <span class="fsize16"  :class="activeTab==='tab2'?'activeTag':'commonTag'" slot="label">参赛队伍</span>
+          <span class="fsize16" :class="activeTab==='tab2'?'activeTag':'commonTag'" slot="label">参赛队伍</span>
           <team :endFlag="endFlag" :competitionId="competitionId" :teamId="teamId" :userId="userId"></team>
         </el-tab-pane>
         <el-tab-pane name="tab3" v-if="attendFlag">
@@ -141,7 +141,7 @@ export default {
 
     const loginCookie = cookie.get("ATAI_BigData_ucenter")
     //如果已经成功登录,则查询报名队伍信息
-    if (loginCookie !== undefined) {
+    if (loginCookie !== undefined && loginCookie !== '') {
       let loginInfo = JSON.parse(loginCookie)
       this.userId = loginInfo.id
       this.getTeamByUserCompetition(this.userId, this.competitionId);

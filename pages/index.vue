@@ -3,101 +3,84 @@
     <div class="container">
       <div class="mt15">
         <el-card>
-          <el-carousel height="420px">
-            <el-carousel-item>
-              <img src="http://www.carch.ac.cn/xwdt/sysxw/202107/W020210702455460617808.jpg" draggable="false">
-            </el-carousel-item>
-            <el-carousel-item>
-              <img src="http://www.carch.ac.cn/xwdt/sysxw/202110/W020211019619706916447.jpg" draggable="false">
+          <el-carousel height="360px">
+            <el-carousel-item v-for="competition in competitions" :key="competition.id">
+              <a :href="'/competition/'+competition.id">
+                <img style="width:100%;height:100%"
+                     :src="competition.cover"
+                     draggable="false"/>
+              </a>
             </el-carousel-item>
           </el-carousel>
         </el-card>
 
         <el-row class="mt20 mb20" :gutter="30">
-          <el-col :span="14">
+          <el-col :span="12">
             <el-card>
               <div slot="header" class="clearfix">
-                <span @click="changeChoose()" :class="{'blue':choose===1}" class="fsize18">科研成果</span>
-                <el-divider direction="vertical"></el-divider>
-                <span @click="changeChoose()" :class="{'blue':choose===2}" class="fsize18">学术动态</span>
-                <router-link style="float: right; padding: 3px 0" :to="choose===1?'/introduce/achievement':'/news/academic'" tag="li" active-class="current"
-                             exact>
-                  <a class="blue" style="text-decoration:none">
-                    更多>>
-                  </a>
+                <span class="fsize18 blue">热门课程</span>
+                <router-link style="float: right; padding: 3px 0" to="/course" tag="li" active-class="current" exact>
+                  <a class="blue" style="text-decoration:none">更多>> </a>
                 </router-link>
               </div>
-<!--                            <div>-->
-<!--                              <el-image style="width:200px;height:120px"-->
-<!--                                        src="http://www.carch.ac.cn/xwdt/sysxw/202110/W020211019619706749752.jpg"></el-image>-->
-<!--                            </div>-->
-<!--                            <div style="border-top: 1px dashed #cbc7c7;margin:10px 0;"></div>-->
-              <ul>
-                <li style="height:30px" v-for="a in aList" :key="a" class="text item">
-                  <a v-if="choose===1" :href="'/introduce/achievement/'+a.id" class="noticeTitle">
-                    {{ a.title }}
+
+              <el-row v-for="course in courses" :key="course.id">
+                <el-col :span="13" style="height:30px" class="text item">
+                  <a :href="'/course/'+course.id" class="noticeTitle">
+                    {{ course.name }}
                   </a>
-                  <a v-else-if="choose===2" :href="'/news/academic/'+a.id" class="noticeTitle">{{ a.title }}</a>
-                  <span style="float:right;text-align:center">{{ a.gmtCreate.substring(0, 10) }}</span>
-                </li>
-              </ul>
+                </el-col>
+                <el-col :span="3">
+                  <el-tag
+                    size="small"
+                    type="danger"
+                    effect="dark">
+                    {{ course.level }}
+                  </el-tag>
+                </el-col>
+                <el-col :span="5">
+                  <el-tag
+                    size="small"
+                    type="primary"
+                    effect="dark">
+                    {{ course.tech.substring(0, 7) }}
+                  </el-tag>
+                </el-col>
+                <el-col :span="3">
+                  <i class="el-icon-user">&nbsp;{{ course.participants }}</i>
+                </el-col>
+              </el-row>
             </el-card>
           </el-col>
-          <el-col :span="10">
+
+          <el-col :span="12">
             <el-card>
               <div slot="header" class="clearfix">
-                <span class="blue fsize18">通知公告</span>
-                <router-link style="float: right; padding: 3px 0" to="/news/notice" tag="li" active-class="current"
-                             exact>
-                  <a class="blue" style="text-decoration:none">
-                    更多>>
-                  </a>
+                <span class="blue fsize18">热门数据集</span>
+                <router-link style="float: right; padding: 3px 0" to="/dataset" tag="li" active-class="current" exact>
+                  <a class="blue" style="text-decoration:none">更多>> </a>
                 </router-link>
               </div>
-              <ul>
-                <li style="height:30px" v-for="notice in noticeList" :key="notice" class="text item">
-                  <a :href="'news/notice/'+notice.id" class="noticeTitle">{{ notice.title }}</a>
-                  <span style="float:right;text-align:center">{{ notice.gmtCreate.substring(0, 10) }}</span>
-                </li>
-              </ul>
+              <el-row v-for="dataset in datasets" :key="dataset.id">
+                <el-col :span="18" style="height:30px" class="text item">
+                  <a :href="'/dataset/'+dataset.id" class="noticeTitle">{{ dataset.name }}</a>
+                </el-col>
+                <el-col :span="3">
+                  <span style="text-align:center">
+                    <i class="el-icon-view"></i>
+                    {{ dataset.watch }}
+                  </span>
+                </el-col>
+                <el-col :span="3">
+                  <span style="text-align:center">
+                    <i class="el-icon-download"></i>
+                    {{ dataset.download }}
+                  </span>
+                </el-col>
+              </el-row>
             </el-card>
           </el-col>
         </el-row>
-
-        <div style="padding-bottom: 80px">
-          <article class="i-teacher-list">
-            <ul class="of">
-              <li v-for="teacher in teacherList" :key="teacher.id">
-                <el-card id="member" class="i-teach-wrap member">
-                  <div slot="header" class="fsize18" style="padding: 0px">
-                    {{teacher.level===2?'实验室领导':'实验室成员'}}
-                  </div>
-                  <div class="i-teach-pic" style="padding: 0px">
-                    <a @click="view(teacher.id)" :title="teacher.name">
-                      <img :alt="teacher.name" :src="teacher.avatar">
-                    </a>
-                  </div>
-                  <div class="mt10 hLh30 txtOf tac">
-                    <a @click="view(teacher.id)" :title="teacher.name" class="fsize18 c-666">{{
-                        teacher.name
-                      }}</a>
-                  </div>
-                  <div class="hLh30 txtOf tac">
-                    <span class="fsize14 c-999">{{ teacher.career }}</span>
-                  </div>
-                  <div class="mt15 i-q-txt">
-                    <p class="c-999 f-fA">{{ teacher.intro }}</p>
-                  </div>
-                </el-card>
-              </li>
-
-            </ul>
-            <div class="clear"></div>
-          </article>
-          <section class="tac">
-            <a @click="view()" title="全部成员" class="comm-btn c-btn-2">查看全部</a>
-          </section>
-        </div>
       </div>
     </div>
   </div>
@@ -111,58 +94,36 @@ export default {
 
   data() {
     return {
-      bannerList: ['1'], //banner数组
-      teacherList: [],
-      noticeList: [],
-      aList: [],
-      choose: 1
+      competitions: [],
+      courses: [],
+      datasets: []
     }
-
   },
   created() {
-    this.getHotTeacher()
-    this.getLatestNotice()
-    this.getLatestAList(this.choose)
+    this.getLargeCompetition()
+    this.getHotCourses()
+    this.getHotDatasets()
   },
   methods: {
-    open(topic, title) {
-      this.$alert(topic, title, {
-        confirmButtonText: '确定',
-        customClass: 'winClass',//弹窗样式
-        callback: action => {
-        }
-      });
-    },
-
-    //查询名师
-    getHotTeacher() {
-      indexApi.getHotTeacher()
+    getLargeCompetition() {
+      indexApi.getLargeCompetition()
         .then(response => {
-          this.teacherList = response.data.data.teacherList
+          this.competitions = response.data.data.large
         })
     },
-
-    //查询公告
-    getLatestNotice() {
-      indexApi.getLatestNotice("notice")
+    getHotCourses() {
+      indexApi.getHotCourses()
         .then(response => {
-          this.noticeList = response.data.data.items
+          this.courses = response.data.data.hotCourses
         })
     },
-
-    getLatestAList(choose) {
-      let type = choose === 1 ? "achievement" : "academic";
-      indexApi.getLatestNotice(type)
+    getHotDatasets() {
+      indexApi.getHotDatasets()
         .then(response => {
-          this.aList = response.data.data.items
+          console.log(response.data.data)
+          this.datasets = response.data.data.hotDatasets
         })
     },
-
-    changeChoose() {
-      this.choose = 3 - this.choose;
-      this.getLatestAList(this.choose)
-    },
-
     view(id) {
       if (id != null)
         this.$router.push({path: `/introduce/member/${id}`})

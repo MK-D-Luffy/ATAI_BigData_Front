@@ -47,7 +47,7 @@
               </el-menu-item>
               <el-menu-item index="4">
                 <router-link to="/ucenter/study/course" tag="li" active-class="current" exact>
-                  <i class="el-icon-document"></i>
+                  <i class="el-icon-video-play"></i>
                   <span>我的课程</span>
                 </router-link>
               </el-menu-item>
@@ -57,12 +57,6 @@
                   <span>数据集</span>
                 </router-link>
               </el-menu-item>
-              <!--            <el-menu-item index="5">-->
-              <!--              <router-link to="/ucenter/msg/message" tag="li" active-class="current" exact>-->
-              <!--                <i class="el-icon-message"></i>-->
-              <!--                <span>消息管理</span>-->
-              <!--              </router-link>-->
-              <!--            </el-menu-item>-->
             </el-menu>
           </el-card>
 

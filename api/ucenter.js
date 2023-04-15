@@ -44,7 +44,7 @@ export default {
     })
   },
 
-  changeMobileOrEmail(params,id) {
+  changeMobileOrEmail(params, id) {
     return request({
       url: `/eduucenter/ucenter-member/changeMobileOrEmail/${id}`,
       method: 'post',
@@ -52,12 +52,33 @@ export default {
     })
   },
 
-  validateSecurity(params,id){
+  validateSecurity(params, id) {
     return request({
       url: `/eduucenter/ucenter-member/validateSecurity/${id}`,
       method: 'post',
       data: params
     })
-  }
+  },
+
+  getUserCompetitions(userId) {
+    return request({
+      url: `/ataiservice/atai-competition/getUserCompetitions/${userId}`,
+      method: 'get'
+    })
+  },
+
+  getUserCourses(userId) {
+    return request({
+      url: `/ataiservice/atai-course/getCourseUsers/${userId}`,
+      method: 'get'
+    })
+  },
+
+  getUserDatasets(userId) {
+    return request({
+      url: `/ataiservice/atai-dataset/getUserDatasets/${userId}`,
+      method: 'get'
+    })
+  },
 
 }
