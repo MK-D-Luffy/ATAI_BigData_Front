@@ -5,26 +5,56 @@
         <div class="bg-ff bradius pt20 pl20">
           <el-form>
             <el-form-item lable="类别" class="linkStyle2">
-              <el-link :type="courseObj.timeStatus===''?'primary':''" @click.native="setTimeStatus('')" :underline="false">全部</el-link>
-              <el-link :type="courseObj.timeStatus==='进行中'?'primary':''" @click.native="setTimeStatus('进行中')" :underline="false">进行中</el-link>
-              <el-link :type="courseObj.timeStatus==='即将开始'?'primary':''" @click.native="setTimeStatus('即将开始')" :underline="false">即将开始</el-link>
-              <el-link :type="courseObj.timeStatus==='已经结束'?'primary':''" @click.native="setTimeStatus('已经结束')" :underline="false">已经结束</el-link>
+              <el-link :type="courseObj.timeStatus===''?'primary':''" @click.native="setTimeStatus('')"
+                       :underline="false">全部
+              </el-link>
+              <el-link :type="courseObj.timeStatus==='进行中'?'primary':''" @click.native="setTimeStatus('进行中')"
+                       :underline="false">进行中
+              </el-link>
+              <el-link :type="courseObj.timeStatus==='即将开始'?'primary':''" @click.native="setTimeStatus('即将开始')"
+                       :underline="false">即将开始
+              </el-link>
+              <el-link :type="courseObj.timeStatus==='已经结束'?'primary':''" @click.native="setTimeStatus('已经结束')"
+                       :underline="false">已经结束
+              </el-link>
             </el-form-item>
             <el-form-item lable="类别" class="linkStyle2">
-              <el-link :type="courseObj.level===''?'primary':''" @click.native="setLevel('')" :underline="false">全部</el-link>
-              <el-link :type="courseObj.level==='入门'?'primary':''" @click.native="setLevel('入门')" :underline="false">入门</el-link>
-              <el-link :type="courseObj.level==='进阶'?'primary':''" @click.native="setLevel('进阶')" :underline="false">进阶</el-link>
-              <el-link :type="courseObj.level==='实战'?'primary':''" @click.native="setLevel('实战')" :underline="false">实战</el-link>
+              <el-link :type="courseObj.level===''?'primary':''" @click.native="setLevel('')" :underline="false">全部
+              </el-link>
+              <el-link :type="courseObj.level==='入门'?'primary':''" @click.native="setLevel('入门')" :underline="false">
+                入门
+              </el-link>
+              <el-link :type="courseObj.level==='进阶'?'primary':''" @click.native="setLevel('进阶')" :underline="false">
+                进阶
+              </el-link>
+              <el-link :type="courseObj.level==='实战'?'primary':''" @click.native="setLevel('实战')" :underline="false">
+                实战
+              </el-link>
             </el-form-item>
             <el-form-item lable="技术" class="linkStyle2">
-              <el-link :type="courseObj.tech===''?'primary':''"  @click.native="setTech('')" :underline="false">全部</el-link>
-              <el-link :type="courseObj.tech==='机器学习/深度学习'?'primary':''"  @click.native="setTech('机器学习/深度学习')" :underline="false">机器学习/深度学习</el-link>
-              <el-link :type="courseObj.tech==='工具与框架'?'primary':''"  @click.native="setTech('工具与框架')" :underline="false">工具与框架</el-link>
-              <el-link :type="courseObj.tech==='计算机视觉'?'primary':''"  @click.native="setTech('计算机视觉')" :underline="false">计算机视觉</el-link>
-              <el-link :type="courseObj.tech==='自然语言处理'?'primary':''"  @click.native="setTech('自然语言处理')" :underline="false">自然语言处理</el-link>
-              <el-link :type="courseObj.tech==='智能数据分析'?'primary':''"  @click.native="setTech('智能数据分析')" :underline="false">智能数据分析</el-link>
-              <el-link :type="courseObj.tech==='智能语音'?'primary':''"  @click.native="setTech('智能语音')" :underline="false">智能语音</el-link>
-              <el-link :type="courseObj.tech==='AI其他'?'primary':''"  @click.native="setTech('AI其他')" :underline="false">AI其他</el-link>
+              <el-link :type="courseObj.tech===''?'primary':''" @click.native="setTech('')" :underline="false">全部
+              </el-link>
+              <el-link :type="courseObj.tech==='机器学习/深度学习'?'primary':''" @click.native="setTech('机器学习/深度学习')"
+                       :underline="false">机器学习/深度学习
+              </el-link>
+              <el-link :type="courseObj.tech==='工具与框架'?'primary':''" @click.native="setTech('工具与框架')"
+                       :underline="false">工具与框架
+              </el-link>
+              <el-link :type="courseObj.tech==='计算机视觉'?'primary':''" @click.native="setTech('计算机视觉')"
+                       :underline="false">计算机视觉
+              </el-link>
+              <el-link :type="courseObj.tech==='自然语言处理'?'primary':''" @click.native="setTech('自然语言处理')"
+                       :underline="false">自然语言处理
+              </el-link>
+              <el-link :type="courseObj.tech==='智能数据分析'?'primary':''" @click.native="setTech('智能数据分析')"
+                       :underline="false">智能数据分析
+              </el-link>
+              <el-link :type="courseObj.tech==='智能语音'?'primary':''" @click.native="setTech('智能语音')" :underline="false">
+                智能语音
+              </el-link>
+              <el-link :type="courseObj.tech==='AI其他'?'primary':''" @click.native="setTech('AI其他')" :underline="false">
+                AI其他
+              </el-link>
             </el-form-item>
             <el-form-item style="margin-top: 20px">
               <el-input v-model="courseObj.name" placeholder="搜索课程" class="input-with-select" style="width: 400px">
@@ -73,8 +103,8 @@
                           <el-col :span="3" justify="start">
                             {{ course.participants }}人在学习
                           </el-col>
-                          <el-col :span="8">
-                            开课时间：{{ course.begin.substr(0, 10) }} - {{ course.end.substr(0, 10) }}
+                          <el-col :span="12">
+                            开课时间：{{ course.begin }} - {{ course.end}}
                           </el-col>
                         </el-row>
                       </el-col>
@@ -126,12 +156,14 @@ export default {
   },
   data() {
     return {
-      data: [],
+      data: {
+        items: [{begin: '', end: ''}]
+      },
       course: [],
       page: 1,
       limit: 10,
       courseObj: {
-        name:'',
+        name: '',
         timeStatus: '',
         level: '',
         tech: ''

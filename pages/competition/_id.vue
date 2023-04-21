@@ -121,11 +121,11 @@ export default {
       competition: {
         deadline: ''
       },
-      // competitionTeam: {
-      //   competitionId: '',
-      //   avatar: 'https://www.datafountain.cn/_df_static/img/avatar.f744cf3.jpg',
-      //   name: 'default_'
-      // },
+      competitionTeam: {
+        competitionId: '',
+        avatar: 'https://www.datafountain.cn/_df_static/img/avatar.f744cf3.jpg',
+        name: 'default_'
+      },
       userCompetition: {},
       endFlag: false,
       attendFlag: false,
@@ -177,8 +177,8 @@ export default {
         });
     },
     //根据用户id，比赛id查询信息
-    getTeamByUserCompetition() {
-      competitionApi
+    async getTeamByUserCompetition() {
+      await competitionApi
         .getTeamByUserCompetition(this.userId, this.competitionId)
         .then(response => {
           const teamUser = response.data.data.teamUser

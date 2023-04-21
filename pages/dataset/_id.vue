@@ -7,7 +7,7 @@
             <el-image
               class="brbs"
               style="width:180px;height:135px"
-              src="https://jiutian.10086.cn/edu/objects-download/76b106f68cb743d6893871627a30a37f%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C.png"></el-image>
+              :src="dataset.image"></el-image>
           </el-col>
           <el-col :span="18">
             <el-row id="course-item">
@@ -15,16 +15,16 @@
               <el-col style="color:#a0a6ab;line-height: 20px" :span="24">
                 <el-avatar
                   size="small"
-                  src="https://www.datafountain.cn/_df_static/img/avatar.f744cf3.jpg">
+                  :src="dataset.avatar===null?'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png':dataset.avatar">
                 </el-avatar>
-                <span class="vam disIb mb20">baiyunrain</span>
+                <span class="vam disIb mb20">{{ dataset.username === null ? '官方数据集' : dataset.username }}</span>
               </el-col>
               <el-col id="datasetInfo" style="color:#606972;line-height: 20px" :span="24">
                 <i class="el-icon-time">
                   {{ dataset.gmtCreate.substring(0, 16) }}
                 </i>
-                <i class="el-icon-download">17</i>
-                <i class="el-icon-view">100</i>
+                <i class="el-icon-view">&nbsp;{{ dataset.watch }}</i>
+                <i class="el-icon-download">&nbsp;{{ dataset.download }}</i>
                 <el-button style="zoom:80%" type="primary" plain>
                   <i style="margin-right: 0px !important;" class="el-icon-collection-tag">{{ dataset.category }}</i>
                 </el-button>
@@ -42,8 +42,8 @@
             </div>
             <div class="fsize18 mb10 mt40" style="font-weight: 700">数据文件</div>
             <div>
-              <a :href="dataset.url" download>
-                <el-button type="primary">
+              <a target="_blank" :href="dataset.url" download>
+                <el-button @click="addDownload" type="primary">
                   点击下载数据
                 </el-button>
               </a>
@@ -71,31 +71,36 @@ export default {
   created() {
     this.id = this.$route.params.id;
     this.getDataset();
+    this.addWatch()
   },
   methods: {
     getDataset() { //比赛列表的方法
       datasetApi.getDataset(this.id)
         .then(response => { //请求成功
-          console.log(111)
           this.dataset = response.data.data.dataset
+          console.log(this.dataset)
         })
         .catch(error => { //请求失败
           console.log(error)
         })
     },
-    download(url) {
-      const link = document.createElement('a');
-      // 这里是将链接地址url转成blob地址，
-      fetch(url).then(res => res.blob()).then(blob => {
-        link.href = URL.createObjectURL(blob)
-        // 下载文件的名称及文件类型后缀
-        link.download = "x.jpeg";
-        document.body.appendChild(link)
-        link.click()
-        //在资源下载完成后 清除 占用的缓存资源
-        window.URL.revokeObjectURL(link.href);
-        document.body.removeChild(link);
-      });
+    addWatch() {
+      datasetApi.addWatch(this.id)
+        .then(response => { //请求成功
+          console.log(response.data)
+        })
+        .catch(error => { //请求失败
+          console.log(error)
+        })
+    },
+    addDownload() {
+      datasetApi.addDownload(this.id)
+        .then(response => { //请求成功
+          console.log(response.data)
+        })
+        .catch(error => { //请求失败
+          console.log(error)
+        })
     }
   }
 }

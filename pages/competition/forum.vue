@@ -17,7 +17,6 @@
       <!--      <el-empty description="还没有内容，赶紧去“等待回答”贡献第一条内容吧～"></el-empty>-->
       <el-main>
         <div class="me-view-card">
-          <!--            <div class="me-view-comment">-->
           <div>
             <div class="me-view-comment-write" style="margin-bottom: 20px;">
               <el-row :gutter="20">

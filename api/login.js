@@ -4,7 +4,7 @@ export default {
   //根据token获取用户信息
   getLoginMemberInfo() {
     return request({
-      url: `/eduucenter/ucenter-member/getMemberInfo`,
+      url: `/ataiucenter/ucenter/getMemberInfo`,
       method: 'get'
     })
   },
@@ -12,7 +12,7 @@ export default {
   //登录
   loginMember(loginInfo) {
     return request({
-      url: `/eduucenter/ucenter-member/login`,
+      url: `/ataiucenter/ucenter/login`,
       method: 'post',
       data: loginInfo
     })
@@ -21,7 +21,7 @@ export default {
   //根据id获取用户信息
   getMemberInfo(id) {
     return request({
-      url: `/eduucenter/ucenter-member/getUserInfoOrder/${id}`,
+      url: `/ataiucenter/ucenter/getUserInfoOrder/${id}`,
       method: 'post'
     })
   },
@@ -29,7 +29,7 @@ export default {
   //根据id获取用户信息（个人中心用）
   getMemberInfoSelf(id) {
     return request({
-      url: `/eduucenter/ucenter-member/getUserInfo/${id}`,
+      url: `/ataiucenter/ucenter/getUserInfo/${id}`,
       method: 'post'
     })
   },

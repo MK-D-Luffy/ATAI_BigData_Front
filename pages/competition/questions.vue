@@ -1,21 +1,12 @@
 <template>
   <div id="aCoursesList" class="questions" style="">
     <!-- 赛题描述 开始 -->
-
-    <section class="container" style="width:98%;">
-
-      <el-form>
-        <el-form-item style="margin-bottom:0" v-if="baomingflag">
-          <span style="font-size:24px;margin-right:20px;">赛题数据</span>
-          <el-tag style="zoom:100%">
-            <i class="el-icon-download"/>
-            <a :href="cover">点击下载赛题</a>
-          </el-tag>
-        </el-form-item>
-
-        <div id="description" v-html="description"></div>
-      </el-form>
-
+    <section class="container" >
+      <el-tag class="mt10 mb10" style="zoom:120%">
+        <a :underline="false" target="_blank" :href="data" download>点击下载赛题数据&nbsp;</a>
+        <i class="el-icon-download"></i>
+      </el-tag>
+      <div id="description" v-html="description"></div>
     </section>
   </div>
 </template>
@@ -34,8 +25,8 @@ export default {
   watch: {
     competition: {
       handler() {
-        if (this.competition!==undefined) {
-          this.cover = this.competition.cover
+        if (this.competition !== undefined) {
+          this.data = this.competition.data
           this.description = this.competition.description
         }
       },
@@ -45,10 +36,9 @@ export default {
   },
   data() {
     return {
-      baomin: "报名比赛",
       teamId: "",
       classList: [],
-      cover: "",
+      data: "",
       description: ""
     };
   },

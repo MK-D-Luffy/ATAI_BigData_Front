@@ -29,30 +29,38 @@
                 <template>
                   <router-link to="/ucenter/info/basic" tag="li" active-class="current" exact>
                     <i class="el-icon-s-custom"></i>
-                    <span>个人信息</span>
+                    <span>基本信息</span>
                   </router-link>
                 </template>
               </el-menu-item>
               <el-menu-item index="2">
+                <template>
+                  <router-link to="/ucenter/info/resume" tag="li" active-class="current" exact>
+                    <i class="el-icon-s-custom"></i>
+                    <span>个人简历</span>
+                  </router-link>
+                </template>
+              </el-menu-item>
+              <el-menu-item index="3">
                 <router-link to="/ucenter/info/password" tag="li" active-class="current" exact>
                   <i class="el-icon-key"></i>
                   <span>修改密码</span>
                 </router-link>
               </el-menu-item>
-              <el-menu-item index="3">
-                <router-link to="/ucenter/study/competition" tag="li" active-class="current" exact>
+              <el-menu-item index="4">
+                <router-link to="/ucenter/competition" tag="li" active-class="current" exact>
                   <i class="el-icon-data-analysis"></i>
                   <span>我的比赛</span>
                 </router-link>
               </el-menu-item>
-              <el-menu-item index="4">
-                <router-link to="/ucenter/study/course" tag="li" active-class="current" exact>
+              <el-menu-item index="5">
+                <router-link to="/ucenter/course" tag="li" active-class="current" exact>
                   <i class="el-icon-video-play"></i>
                   <span>我的课程</span>
                 </router-link>
               </el-menu-item>
-              <el-menu-item index="4">
-                <router-link to="/ucenter/study/dataset" tag="li" active-class="current" exact>
+              <el-menu-item index="6">
+                <router-link to="/ucenter/dataset" tag="li" active-class="current" exact>
                   <i class="el-icon-document"></i>
                   <span>数据集</span>
                 </router-link>

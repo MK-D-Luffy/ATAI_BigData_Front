@@ -93,10 +93,13 @@
                           <el-col :span="4" justify="start">
                           <span title>
                             <el-avatar style="background-color:#fff;"
+                                       class="mr10"
                                        size="small"
-                                       :src="dataset.avatar">
+                                       :src="dataset.avatar===null?'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png':dataset.avatar">
                             </el-avatar>
-                            <span class="vam disIb mb20">{{ dataset.username }}</span>
+                            <span class="vam disIb mb20">{{
+                                dataset.username === null ? '官方数据集' : dataset.username
+                              }}</span>
                           </span>
                           </el-col>
                           <el-col :span="4">
@@ -230,8 +233,6 @@ export default {
         });
       }
     },
-    //分页切换的方法
-    //参数是页码数
     gotoPage(page) {
       datasetApi.getDatasetPageList(page, this.limit, this.datasetObj)
         .then(response => {
@@ -247,8 +248,7 @@ export default {
       }
     }
   }
-
-};
+}
 </script>
 <style scoped>
 .active {

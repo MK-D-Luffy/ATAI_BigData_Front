@@ -5,7 +5,7 @@ export default {
   //用户信息修改功能
   updateMemberInfo(ucenterMember) {
     return request({
-      url: `/eduucenter/ucenter-member/updateMember`,
+      url: `/ataiucenter/ucenter/updateMember`,
       method: 'post',
       data: ucenterMember
     })
@@ -14,7 +14,7 @@ export default {
   //判断用户名是否重复
   checkNickname(nickname) {
     return request({
-      url: `/eduucenter/ucenter-member/checkNickname/${nickname}`,
+      url: `/ataiucenter/ucenter/checkNickname/${nickname}`,
       method: 'get',
     })
   },
@@ -22,7 +22,7 @@ export default {
   //判断手机号是否重复
   checkPhone(phone) {
     return request({
-      url: `/eduucenter/ucenter-member/checkPhone/${phone}`,
+      url: `/ataiucenter/ucenter/checkPhone/${phone}`,
       method: 'get',
     })
   },
@@ -30,7 +30,7 @@ export default {
   //判断邮箱是否重复
   checkEmail(email) {
     return request({
-      url: `/eduucenter/ucenter-member/checkEmail/${email}`,
+      url: `/ataiucenter/ucenter/checkEmail/${email}`,
       method: 'get',
     })
   },
@@ -38,7 +38,7 @@ export default {
   //修改密码
   changePassword(formItem) {
     return request({
-      url: `/eduucenter/ucenter-member/changePwd`,
+      url: `/ataiucenter/ucenter/changePwd`,
       method: 'post',
       data: formItem
     })
@@ -46,7 +46,7 @@ export default {
 
   changeMobileOrEmail(params, id) {
     return request({
-      url: `/eduucenter/ucenter-member/changeMobileOrEmail/${id}`,
+      url: `/ataiucenter/ucenter/changeMobileOrEmail/${id}`,
       method: 'post',
       data: params
     })
@@ -54,7 +54,7 @@ export default {
 
   validateSecurity(params, id) {
     return request({
-      url: `/eduucenter/ucenter-member/validateSecurity/${id}`,
+      url: `/ataiucenter/ucenter/validateSecurity/${id}`,
       method: 'post',
       data: params
     })
@@ -78,6 +78,21 @@ export default {
     return request({
       url: `/ataiservice/atai-dataset/getUserDatasets/${userId}`,
       method: 'get'
+    })
+  },
+
+  //===============================个人简历===============================
+  getResumeById(userId) {
+    return request({
+      url: `/ataiucenter/ucenter/getUserResume/${userId}`,
+      method: 'get'
+    })
+  },
+  updateResume(resume) {
+    return request({
+      url: `/ataiucenter/ucenter/updateUserResume`,
+      method: 'post',
+      data: resume
     })
   },
 

@@ -20,7 +20,7 @@ export default {
   //注册
   registerMember(formItem) {
     return request({
-      url: `/eduucenter/ucenter-member/register`,
+      url: `/ataiucenter/ucenter/register`,
       method: 'post',
       data: formItem
     })

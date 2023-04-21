@@ -26,14 +26,14 @@
           </el-col>
         </el-row>
       </el-header>
-      <el-container class="mt20" style="height: 630px">
+      <el-container class="mt20" style="min-height: 630px">
         <el-main class="bg-ff brbs">
           <el-tabs class="pl20 fsize14" tab-position="top" style="height: 200px;">
             <el-tab-pane>
               <span slot="label" class="fsize16">课程目录</span>
               <div v-for="(aClass,index) in courseClass" :key="aClass.id" class="pt20 pb20"
                    style="border-bottom: 1px solid rgb(238, 238, 238);">
-                <a @click="view(aClass.id)">
+                <a @click="viewClass(aClass.id)">
                   <el-row>
                     <el-col :span="3" v-if="baomingflag===true">
                       <el-button v-if="userCourse.learned.substr(index,1)==='1'" size="mini" type="success" plain>已学习
@@ -97,27 +97,29 @@
             <span class="fsize20" style="font-weight: 600">相关课程</span>
             <div>
               <el-image
+                @click="viewCourse(relatedCourses[0].id)"
                 class="brbs"
                 style="width:232px;height:172px;margin: 10px 0"
-                src="https://jiutian.10086.cn/edu/objects-download/76b106f68cb743d6893871627a30a37f%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C.png"></el-image>
+                :src="relatedCourses[0].cover"></el-image>
               <div>
-                <span class="course-header">李宏毅深度学习进阶</span>
+                <span class="course-header">{{relatedCourses[0].name}}</span>
               </div>
               <div>
-                xxx人学习
+                {{relatedCourses[0].participants}}人学习
               </div>
             </div>
             <el-divider></el-divider>
             <div>
               <el-image
+                @click="viewCourse(relatedCourses[1].id)"
                 class="brbs"
                 style="width:232px;height:172px;"
-                src="https://jiutian.10086.cn/edu/objects-download/76b106f68cb743d6893871627a30a37f%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C.png"></el-image>
+                :src="relatedCourses[1].cover"></el-image>
               <div>
-                <span class="course-header">李宏毅深度学习进阶</span>
+                <span class="course-header">{{relatedCourses[1].name}}</span>
               </div>
               <div>
-                xxx人学习
+                {{relatedCourses[1].participants}}人学习
               </div>
             </div>
           </div>
@@ -142,6 +144,7 @@ export default {
         cover: ''
       },
       courseClass: [],
+      relatedCourses:[{},{}],
       baomingflag: false,
       userCourse: {
         id: '',
@@ -162,6 +165,7 @@ export default {
 
     this.getCourse(this.userCourse.courseId);
     this.getCourseClass(this.userCourse.courseId)
+    this.getRelatedCourses()
     //查询用户在这个比赛中的信息
     if (this.userCourse.userId !== '') {
       this.getCourseUser(this.userCourse.userId, this.userCourse.courseId);
@@ -207,6 +211,21 @@ export default {
             this.userCourse.id = userCourse.id
             this.userCourse.learned = userCourse.learned
           }
+        })
+        .catch(error => {
+          //请求失败
+          this.$message({
+            type: "error",
+            message: "请求失败"
+          });
+        });
+    },
+    getRelatedCourses(){
+      courseApi
+        .getRelatedCourses(this.$route.params.id)
+        .then(response => {
+          console.log(response.data)
+          this.relatedCourses = response.data.data.relatedCourses
         })
         .catch(error => {
           //请求失败
@@ -281,7 +300,14 @@ export default {
         });
       })
     },
-    view(id) {
+    viewCourse(id) {
+      if (id != null) {
+        this.$router.push({path: `/course/${id}`});
+      } else {
+        this.reload();
+      }
+    },
+    viewClass(id) {
       if (id != null) {
         this.$router.push({path: `/course/class/${id}`});
       } else {

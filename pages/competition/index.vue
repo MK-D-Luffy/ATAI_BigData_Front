@@ -33,8 +33,8 @@
               <el-link @click.native="setLevel('训练赛')" :underline="false"
                        :type="compObj.level==='训练赛'?'primary':''">训练赛
               </el-link>
-              <el-link @click.native="setLevel('个人赛')" :underline="false"
-                       :type="compObj.level==='个人赛'?'primary':''">个人赛
+              <el-link @click.native="setLevel('大奖赛')" :underline="false"
+                       :type="compObj.level==='大奖赛'?'primary':''">大奖赛
               </el-link>
             </el-form-item>
             <el-form-item lable="技术" class="linkStyle2">
@@ -72,7 +72,7 @@
                     <el-col :span="2" justify="start">
                       <el-button size="mini" style="pointer-events: none;zoom:80%"
                                  class="greenBtn"
-                                 :class="[{greenBtn:competition.level==='个人赛'},
+                                 :class="[{greenBtn:competition.level==='大奖赛'},
                                           {redBtn: competition.level==='官方赛'},
                                           {purpleBtn:competition.level==='训练赛'},
                                         ]">

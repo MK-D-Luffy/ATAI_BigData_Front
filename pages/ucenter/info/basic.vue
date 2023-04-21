@@ -5,7 +5,7 @@
         <div>
           <section class="c-infor-tabTitle c-tab-title">
             <a href="javascript: void(0)" title="基本资料" class="current">
-              个人信息
+              基本信息
             </a>
           </section>
         </div>
@@ -14,16 +14,6 @@
         <el-form show-message label-width="80px" size="medium" :model="memberInfo" ref="memberInfo">
           <el-form-item label="昵称" prop="nickname" :rules="[{validator:checkNickname,trigger:'blur'}]">
             <el-input v-model="memberInfo.nickname" style="width:220px"/>
-          </el-form-item>
-          <el-form-item label="性别">
-            <el-select v-model="memberInfo.sex" style="width:110px" clearable placeholder="请选择">
-              <!--
-                数据类型一定要和取出的json中的一致，否则没法回填
-                value使用动态绑定的值，性别由1 2代替
-              -->
-              <el-option :value="1" label="女"/>
-              <el-option :value="2" label="男"/>
-            </el-select>
           </el-form-item>
           <el-form-item label="手机号">
             <!--            <el-input v-model="memberInfo.mobile"/>-->
@@ -35,9 +25,6 @@
             <span>{{ memberInfo.email.substring(0, 2) + "****" + memberInfo.email.substring(10) }}</span>
             <el-button @click="emailDialogVisible = true" style="margin-left:24px" type="primary">修改邮箱</el-button>
           </el-form-item>
-          <el-form-item label="年龄">
-            <el-input-number style="width:180px" v-model="memberInfo.age" :min="0" controls-position="right"/>
-          </el-form-item>
 
           <!-- 头像 -->
           <el-form-item label="头像">
@@ -47,22 +34,12 @@
               :on-error="handleAvatarError"
               :before-upload="beforeAvatarUpload"
               class="avatar-uploader"
-              action=" http://localhost:8666/ataioss/fileoss/upload">
+              action=" http://localhost:8666/ataioss/fileoss">
               <img v-if="memberInfo.avatar" :src="memberInfo.avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"/>
               <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过1MB</div>
             </el-upload>
           </el-form-item>
-          <el-form-item label="个性签名">
-            <el-input
-              style="width:600px"
-              type="textarea"
-              :autosize="{ minRows: 4, maxRows: 8}"
-              placeholder="请输入内容"
-              v-model="memberInfo.sign">
-            </el-input>
-          </el-form-item>
-
           <el-form-item style="margin-top: 40px;margin-bottom: 40px">
             <el-button :disabled="saveBtnDisabled" plain="true" type="primary" @click="saveMsg">保存</el-button>
           </el-form-item>
@@ -366,18 +343,15 @@ export default {
         this.$message.error('上传失败! （非20000）')
       }
     },
-
     // 头像上传失败（http）
     handleAvatarError() {
       this.$message.error('上传失败! （http失败）')
     },
-
     // 上传校验
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg'
       const isPNG = file.type === 'image/png'
       const isLt1M = file.size / 1024 / 1024 < 1
-
       if (!isJPG && !isPNG) {
         this.$message.error('上传头像图片只能是 JPG/PNG 格式!')
       }

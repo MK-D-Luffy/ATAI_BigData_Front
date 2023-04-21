@@ -60,6 +60,7 @@
           <el-col :span=18>
             <div class="pb10 fsize16 fw6">
               {{ teamUser.name }}
+              <i v-if="userId===teamUser.userId" class="el-icon-s-custom"></i>
             </div>
             <div class="pb10 fsize14">
               <span v-if="teamUser.intro!==null">
@@ -72,12 +73,12 @@
       </el-card>
     </el-main>
 
-
     <el-main v-else-if="teamIndex==='2'">
       <el-input placeholder="请输入队伍名" v-model="name" style="width:300px" class="mb20">
         <el-button slot="append" icon="el-icon-search" @click="gotoPage(1)"></el-button>
       </el-input>
-      <el-card v-for="team in teamList.items" :key="team.id" class="mb20">
+      <el-empty v-if="teamList.items.length===0" :image-size="200" description="暂无队伍信息"></el-empty>
+      <el-card v-else v-for="team in teamList.items" :key="team.id" class="mb20">
         <el-row>
           <el-col :span="4" justify="start">
             <el-image
@@ -102,7 +103,8 @@
             </div>
           </el-col>
           <el-col :span="3">
-            <el-button type="primary" @click="joinTeam(team.id)">申请加入</el-button>
+            <el-button v-if="team.participated===false" type="primary" @click="joinTeam(team.id)">申请加入</el-button>
+            <div v-else class="mt10 hLh30 txtOf tac fsize20" style="color:#67C23A">已申请</div>
           </el-col>
         </el-row>
       </el-card>
@@ -132,6 +134,7 @@
       <!-- 公共分页 结束 -->
     </el-main>
     <el-main v-else>
+      <el-empty v-if="joinTeamUsers.length===0" :image-size="200" description="暂无组队申请"></el-empty>
       <el-card v-for="joinTeamUser in joinTeamUsers" :key="joinTeamUser.id" class="mb20">
         <el-row>
           <el-col :span="3" justify="start">
@@ -155,7 +158,9 @@
           <el-col :span="3">
             <el-row>
               <el-col class="mt10 mb20" :span="24">
-                <el-button size="mini" type="primary" @click="acceptJoinTeam(joinTeamUser.userId)">允许加入</el-button>
+                <el-button size="mini" type="primary" @click="acceptJoinTeam(joinTeamUser.userId,joinTeamUser.teamId)">
+                  允许加入
+                </el-button>
               </el-col>
               <el-col :span="24">
                 <el-button size="mini" type="danger" @click="refuseJoinTeam(joinTeamUser.userId)">拒绝加入</el-button>
@@ -180,15 +185,27 @@ export default {
     teamId: String,
     userId: String
   },
+  // watch: {
+  //   teamId: {
+  //     immediate: true,  //很重要，初始化就可以被监听
+  //     handler(newVal) {
+  //       this.teamId = newVal
+  //       // this.valueType = newVal;   //赋值给data
+  //       // this.getDistrictList();   //拿到参数后去做请求
+  //       console.log(this.teamId )
+  //
+  //     },
+  //   }
+  // },
   data() {
     return {
       competitionTeam: {
-        avatar: '',
+        avatar: 'https://www.datafountain.cn/_df_static/img/avatar.f744cf3.jpg',
         name: '',
         intro: '',
-        isAllowed:1
+        isAllowed: 1
       },
-      isAllowed:true,
+      isAllowed: true,
       teamUsers: [],
       name: '',
       teamList: [],
@@ -202,10 +219,14 @@ export default {
     }
   },
   mounted() {
-    this.getCompetitionTeam()
-    this.getTeamUsers();
-    this.getTeamList()
-    this.getJoinTeamUser()
+    setTimeout(() => {
+      // 方法区
+      this.getCompetitionTeam()
+      this.getTeamUsers();
+      this.getTeamList()
+      this.getJoinTeamUser()
+    }, 500);
+
   },
   methods: {
     setTeamIndex(index) {
@@ -220,22 +241,21 @@ export default {
           console.log(error)
         })
     },
-    getTeamList(page = 1) { //比赛列表的方法
-      this.page = page
-      competitionApi.getTeamPageList(this.page, this.limit, this.name)
-        .then(response => { //请求成功
-          this.teamList = response.data.data
-        })
-        .catch(error => { //请求失败
-          console.log(error)
-        })
-    },
     getTeamUsers() {
       competitionApi
         .getTeamUsers(this.teamId)
         .then(response => {
           this.teamUsers = response.data.data.users
-          // this.receivers = response.data.data.receivers
+        })
+    },
+    getTeamList(page = 1) { //比赛列表的方法
+      this.page = page
+      competitionApi.getTeamPageList(this.page, this.limit, this.teamId, this.userId, this.name)
+        .then(response => { //请求成功
+          this.teamList = response.data.data
+        })
+        .catch(error => { //请求失败
+          console.log(error)
         })
     },
     gotoPage(page) {
@@ -245,18 +265,24 @@ export default {
         })
     },
     joinTeam(teamId) {
-      let teamJoin = {}
-      teamJoin.userId = this.userId
-      teamJoin.competitionId = this.competitionId
-      teamJoin.teamId = teamId
-      competitionApi.joinTeam(teamJoin).then(response => {
-        if (response.data.success) {
-          this.$message({
-            type: "success",
-            message: "申请成功"
-          });
-        }
-      });
+      this.$confirm('申请通过后无法修改队伍信息, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let teamJoin = {}
+        teamJoin.userId = this.userId
+        teamJoin.competitionId = this.competitionId
+        teamJoin.teamId = teamId   //我请求加入的队伍
+        competitionApi.joinTeam(teamJoin).then(response => {
+          if (response.data.success) {
+            this.$message({
+              type: "success",
+              message: "申请成功"
+            });
+          }
+        });
+      })
     },
     getJoinTeamUser() {
       competitionApi.getJoinTeamUser(this.competitionId, this.teamId)
@@ -264,9 +290,9 @@ export default {
           this.joinTeamUsers = response.data.data.users
         });
     },
-    acceptJoinTeam(userId) {
+    acceptJoinTeam(userId, oldTeamId) {
       competitionApi
-        .acceptJoinTeam(userId, this.competitionId, this.teamId)
+        .acceptJoinTeam(userId, this.competitionId, oldTeamId, this.teamId)
         .then(response => {
           if (response.data.success) {
             this.$message({

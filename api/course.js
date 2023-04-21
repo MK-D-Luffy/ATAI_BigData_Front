@@ -22,9 +22,16 @@ export default {
     })
   },
 
-  getCourseUser(userid, courseid) {
+  getCourseUser(userId, courseId) {
     return request({
-      url: `/ataiservice/atai-course/getCourseUser/${userid}/${courseid}`,
+      url: `/ataiservice/atai-course/getCourseUser/${userId}/${courseId}`,
+      method: 'get',
+    })
+  },
+
+  getRelatedCourses(courseId) {
+    return request({
+      url: `/ataiservice/atai-course/getRelatedCourses/${courseId}`,
       method: 'get',
     })
   },

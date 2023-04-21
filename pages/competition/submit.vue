@@ -19,23 +19,27 @@
     <el-main v-if="submitIndex==='1'">
       <el-row>
         <el-col :span="24">
-          <el-tag type="warning">依据竞赛规则每队总共可提交 5 次，队伍今日还可提交 {{ submitCounts }} 次，您本人今日还可提交 {{ submitCounts }} 次</el-tag>
+          <el-tag type="warning">依据竞赛规则每队总共可提交 {{ submitCounts }} 次，队伍今日还可提交 {{ mySubmitCounts }} 次，您本人今日还可提交
+            {{ mySubmitCounts }} 次
+          </el-tag>
         </el-col>
         <el-col class="mt20 fsize14" :span="24">
           <span>结果文件</span>
           <el-tag size="mini" type="info">必传项，成绩评测必备文件</el-tag>
+          <el-tag v-if="submitType===1" size="small" type="success">需提交代码(.py)</el-tag>
+          <el-tag v-if="submitType===0" size="small" type="success">需提交结果集(.txt)</el-tag>
         </el-col>
         <el-col class="mt15" :span="24">
           <el-form>
             <el-form-item>
               <el-upload
-                :class="{ notAllowed: submitCounts===0}"
+                :class="{ notAllowed: mySubmitCounts===0}"
                 drag
                 ref="myUpload"
                 :auto-upload="false"
                 :on-success="fileUploadSuccess"
                 :on-error="fileUploadError"
-                :disabled="importBtnDisabled||submitCounts===0"
+                :disabled="importBtnDisabled||mySubmitCounts===0"
                 :limit="1"
                 :action="BASE_API+'/ataiservice/atai-competition/submit/'+competitionId+'/'+teamId+'/'+userId"
                 name="file"
@@ -46,13 +50,13 @@
               </el-upload>
             </el-form-item>
             <el-form-item>
-              <el-button :disabled="submitCounts===0" :class="{ notAllowed: submitCounts===0 }"
+              <el-button :disabled="mySubmitCounts===0" :class="{ notAllowed: mySubmitCounts===0 }"
                          style="background-color:#00C1DE;color:#fff;"
                          slot="trigger" size="small">选取文件
               </el-button>
               <el-button
-                :disabled="submitCounts===0"
-                :class="{ notAllowed: submitCounts===0 }"
+                :disabled="mySubmitCounts===0"
+                :class="{ notAllowed: mySubmitCounts===0 }"
                 :loading="loading"
                 style="margin-left: 10px;"
                 size="small"
@@ -69,7 +73,8 @@
       <el-tabs v-model="submit2Index">
         <el-tab-pane name="1">
           <span slot="label" class="fsize16 fw6 mb20" style="color:black">我的提交</span>
-          <el-card v-for="record in recordsByUser" :key="record.id" class="mb20">
+          <el-empty v-if="recordsByUser.length===0" :image-size="200" description="暂无提交记录"></el-empty>
+          <el-card v-else v-for="record in recordsByUser" :key="record.id" class="mb20">
             <el-row>
               <el-col class="pb10 fsize16 fw6" style="border-bottom: 1px dashed #e4e7ed;" :span=24>
                 {{ record.filename }}
@@ -92,13 +97,14 @@
         </el-tab-pane>
         <el-tab-pane name="2">
           <span slot="label" class="fsize16 fw6" style="color:black">队伍提交</span>
-          <el-card v-for="record in recordsByTeam" :key="record.id" class="mb20">
+          <el-empty v-if="recordsByTeam.length===0" :image-size="200" description="暂无提交记录"></el-empty>
+          <el-card v-else v-for="record in recordsByTeam" :key="record.id" class="mb20">
             <el-row>
               <el-col class="pb10 fsize16 fw6" style="border-bottom: 1px dashed #e4e7ed;" :span=19>
                 {{ record.filename }}
               </el-col>
               <el-col class="fsize12 fw4" style="color: #909399;" :span="5">
-                上传用户：SADAddddddddd
+                上传用户：{{ record.username }}
               </el-col>
             </el-row>
             <el-row class="mt10 mb15">
@@ -173,10 +179,12 @@ export default {
   data() {
     return {
       BASE_API: "http://localhost:8666", // 接口API地址
-      fileUploadBtnText: "上传到服务器", // 按钮文字
+      fileUploadBtnText: "提交结果", // 按钮文字
       importBtnDisabled: false, // 按钮是否禁用,
       loading: false,
       submitCounts: 0,
+      mySubmitCounts: 0,
+      submitType: 0,
       activeIndex: "1",
       submitIndex: "1",
       submit2Index: "1",
@@ -186,7 +194,7 @@ export default {
     };
   },
   mounted() {
-    // this.submitCounts = this.userCompetition.submitCounts;
+    this.getCompetition()
     this.getCompetitionTeam()
     this.getRecordsByUserId()
     this.getRecordsByTeamId()
@@ -242,10 +250,18 @@ export default {
         message: "导入文件失败"
       });
     },
+    getCompetition() {
+      competitionApi
+        .getCompetition(this.competitionId)
+        .then(response => {
+          this.submitCounts = response.data.data.competition.submitCounts
+          this.submitType = response.data.data.competition.submitType
+        })
+    },
     getCompetitionTeam() {
       competitionApi.getCompetitionTeam(this.teamId)
         .then(response => {
-          this.submitCounts = response.data.data.data.submitCounts
+          this.mySubmitCounts = response.data.data.data.submitCounts
         })
     },
     getRecordsByUserId() {

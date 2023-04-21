@@ -2,20 +2,35 @@
   <div class="bg-fa of">
     <section class="container bg-ff mt20 mb40 bradius">
       <el-form :model="dataset" ref="datasetForm" label-width="120px" class="mt20 mr30">
-        <el-form-item label="封面图片  ">
-          <el-image :src="dataset.image">
-          </el-image>
+        <el-form-item label="数据集封面">
+          <el-upload
+            style="width:320px;"
+            :show-file-list="true"
+            :on-success="handleAvatarSuccess"
+            :on-error="handleAvatarError"
+            :before-upload="beforeAvatarUpload"
+            action=" http://localhost:8666/ataioss/fileoss">
+            <el-image v-if="dataset.image" :src="dataset.image"></el-image>
+            <i v-else class="el-icon-plus avatar-uploader-icon"/>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过1MB</div>
+          </el-upload>
         </el-form-item>
+        <!--        <el-form-item label="封面图片  ">-->
+        <!--          <el-image :src="dataset.image">-->
+        <!--          </el-image>-->
+        <!--        </el-form-item>-->
 
-        <el-form-item required label="数据集名称" prop="name"  :rules="[{ required: true, message: '请输入名称', trigger: 'blur' }]">
+        <el-form-item required label="数据集名称" prop="name"
+                      :rules="[{ required: true, message: '请输入名称', trigger: 'blur' }]">
           <el-input v-model="dataset.name" style="width: 340px"/>
         </el-form-item>
 
-        <el-form-item required label="数据集简介" prop="intro"  :rules="[{ required: true, message: '请输入简介', trigger: 'blur' }]">
+        <el-form-item required label="数据集简介" prop="intro"
+                      :rules="[{ required: true, message: '请输入简介', trigger: 'blur' }]">
           <el-input v-model="dataset.intro" :rows="5" type="textarea"/>
         </el-form-item>
         <!-- 富文本 -->
-        <el-form-item required label="数据集文件"  :rules="[{ required: true, message: '请输入手机号码', trigger: 'blur' }]">
+        <el-form-item required label="数据集文件" :rules="[{ required: true, message: '请输入手机号码', trigger: 'blur' }]">
           <el-upload
             ref="upload"
             :auto-upload="false"
@@ -39,7 +54,8 @@
           </el-upload>
         </el-form-item>
         <!-- 截止日期 -->
-        <el-form-item required label="数据集类别" prop="category" :rules="[{ required: true, message: '请选择类别', trigger: 'blur' }]">
+        <el-form-item required label="数据集类别" prop="category"
+                      :rules="[{ required: true, message: '请选择类别', trigger: 'blur' }]">
           <el-radio-group v-model="dataset.category" size="mini">
             <el-radio label="互联网" border>互联网</el-radio>
             <el-radio label="金融" border>金融</el-radio>
@@ -71,7 +87,7 @@ export default {
   data() {
     return {
       dataset: {
-        userId:'',
+        userId: '',
         image: 'https://wid.s3.cn-north-1.amazonaws.com.cn/production/datasets/bgmap/90ffbe6e-3c48-48f1-be5a-eb851080d34e.png',
         name: '',
         intro: '',
@@ -111,7 +127,7 @@ export default {
         // 判断路径没有id值  添加操作
         // 清空表单即清空 dataset
         this.dataset = {
-          userId:'',
+          userId: '',
           image: 'https://wid.s3.cn-north-1.amazonaws.com.cn/production/datasets/bgmap/90ffbe6e-3c48-48f1-be5a-eb851080d34e.png',
           name: '',
           intro: '',
@@ -143,9 +159,9 @@ export default {
             const loginCookie = cookie.get("ATAI_BigData_ucenter")
             if (loginCookie !== undefined && loginCookie !== '') {
               const loginInfo = JSON.parse(cookie.get("ATAI_BigData_ucenter"));
+              this.dataset.userId = loginInfo.id
             }
-            this.dataset.userId = loginInfo.id
-            if(this.dataset.userId!==undefined){
+            if (this.dataset.userId !== undefined) {
               this.addDataset()
             }
           } else {
@@ -238,7 +254,34 @@ export default {
         type: 'error',
         message: '导入文件失败'
       })
-    }
+    },
+    // 头像上传成功
+    handleAvatarSuccess(response) {
+      if (response.success) {
+        this.dataset.image = response.data.url
+        // 强制重新渲染
+        this.$forceUpdate()
+      } else {
+        this.$message.error('上传失败! （非20000）')
+      }
+    },
+    // 头像上传失败（http）
+    handleAvatarError() {
+      this.$message.error('上传失败! （http失败）')
+    },
+    // 上传校验
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isPNG = file.type === 'image/png'
+      const isLt1M = file.size / 1024 / 1024 < 1
+      if (!isJPG && !isPNG) {
+        this.$message.error('上传头像图片只能是 JPG/PNG 格式!')
+      }
+      if (!isLt1M) {
+        this.$message.error('上传头像图片大小不能超过 1MB!')
+      }
+      return (isJPG || isPNG) && isLt1M
+    },
   }
 }
 </script>

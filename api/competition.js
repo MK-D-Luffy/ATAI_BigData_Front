@@ -16,9 +16,9 @@ export default {
       method: 'get',
     })
   },
-  getTeamPageList(page, limit, name) {
+  getTeamPageList(page, limit,teamId, userId,name) {
     return request({
-      url: `/ataiservice/atai-competition/pageTeamCondition/${page}/${limit}`,
+      url: `/ataiservice/atai-competition/pageTeamCondition/${page}/${limit}/${teamId}/${userId}`,
       method: 'post',
       name: name
     })
@@ -49,13 +49,13 @@ export default {
       method: 'get',
     })
   },
-  getRecordsByUserId(competitionId,userId) {
+  getRecordsByUserId(competitionId, userId) {
     return request({
       url: `/ataiservice/atai-competition/getRecordByUserId/${competitionId}/${userId}`,
       method: 'get',
     })
   },
-  getRecordsByTeamId(competitionId,teamId) {
+  getRecordsByTeamId(competitionId, teamId) {
     return request({
       url: `/ataiservice/atai-competition/getRecordByTeamId/${competitionId}/${teamId}`,
       method: 'get',
@@ -111,9 +111,9 @@ export default {
     })
   },
 
-  acceptJoinTeam(userId, competitionId, teamId) {
+  acceptJoinTeam(userId, competitionId, oldTeamId, newTeamId) {
     return request({
-      url: `/ataiservice/atai-competition/acceptJoinTeam/${userId}/${competitionId}/${teamId}`,
+      url: `/ataiservice/atai-competition/acceptJoinTeam/${userId}/${competitionId}/${oldTeamId}/${newTeamId}`,
       method: 'get',
     })
   },

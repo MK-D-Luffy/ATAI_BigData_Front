@@ -3,29 +3,29 @@
     <el-container style="margin:20px 50px 30px 50px">
       <el-main class="bg-ff brbs" style="padding: 30px;">
         <el-row>
-          <el-col :span="7">
-            <div class="onlineHelp cg-box">
-              <div class="tools">
-                <div class="page">第 {{ pageNum }} /{{ pageTotalNum }}页</div>
-                <el-input v-model.number="goPageNum" style="width: 50px;margin-right: 8px"></el-input>
-                <el-button size="mini" type="success" @click.stop="goPage"> 前往</el-button>
-                <el-button size="mini" type="primary" @click.stop="prePage"> 上一页</el-button>
-                <el-button size="mini" type="primary" @click.stop="nextPage"> 下一页</el-button>
-              </div>
-              <div class="pdf-box">
-                <pdf ref="pdf"
-                     :src="url"
-                     :page="pageNum"
-                     @progress="loadedRatio = $event"
-                     @page-loaded="pageLoaded($event)"
-                     @num-pages="pageTotalNum=$event"
-                     @error="pdfError($event)"
-                     @link-clicked="page = $event">
-                </pdf>
-              </div>
-            </div>
-          </el-col>
-          <el-col :span="17">
+<!--          <el-col :span="7">-->
+<!--            <div class="onlineHelp cg-box">-->
+<!--              <div class="tools">-->
+<!--                <div class="page">第 {{ pageNum }} /{{ pageTotalNum }}页</div>-->
+<!--                <el-input v-model.number="goPageNum" style="width: 50px;margin-right: 8px"></el-input>-->
+<!--                <el-button size="mini" type="success" @click.stop="goPage"> 前往</el-button>-->
+<!--                <el-button size="mini" type="primary" @click.stop="prePage"> 上一页</el-button>-->
+<!--                <el-button size="mini" type="primary" @click.stop="nextPage"> 下一页</el-button>-->
+<!--              </div>-->
+<!--              <div class="pdf-box">-->
+<!--                <pdf ref="pdf"-->
+<!--                     :src="url"-->
+<!--                     :page="pageNum"-->
+<!--                     @progress="loadedRatio = $event"-->
+<!--                     @page-loaded="pageLoaded($event)"-->
+<!--                     @num-pages="pageTotalNum=$event"-->
+<!--                     @error="pdfError($event)"-->
+<!--                     @link-clicked="page = $event">-->
+<!--                </pdf>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </el-col>-->
+          <el-col :span="24">
             <!--在视频外面加一个容器-->
             <div class="input_video">
               <video-player class="video-player vjs-custom-skin"

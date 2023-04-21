@@ -26,9 +26,9 @@
               <router-link to="/dataset" tag="li" active-class="current">
                 <a>数据集</a>
               </router-link>
-              <router-link v-if="loginFlag" to="/host" tag="li" active-class="current">
-                <a>我要办赛</a>
-              </router-link>
+<!--              <router-link v-if="loginFlag" to="/host" tag="li" active-class="current">-->
+<!--                <a>我要办赛</a>-->
+<!--              </router-link>-->
             </ul>
 
             <ul class="h-r-login">
